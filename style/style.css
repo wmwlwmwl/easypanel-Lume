@@ -731,6 +731,19 @@ textarea:focus {
 	box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
 }
 
+input[type="text"]:disabled,
+input[type="password"]:disabled,
+input[type="number"]:disabled,
+input[type="email"]:disabled,
+input[type="search"]:disabled,
+select:disabled,
+textarea:disabled {
+	background: #f3f4f6;
+	color: var(--ep-muted-2);
+	border-color: var(--ep-border);
+	cursor: not-allowed;
+}
+
 input[type="submit"],
 input[type="button"],
 button {

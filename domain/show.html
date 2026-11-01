@@ -1,4 +1,4 @@
-<script src='{{$STATIC}}js/domain.js?v=8'></script>
+<script src='{{$STATIC}}js/domain.js?v=9'></script>
 
 <div class="main">
 	<div class="public_pa">域名绑定</div>
@@ -28,6 +28,7 @@
 			<div class="ep-form-row">
 				<span class="ep-form-label">域名</span>
 				<input type='text' size='40' name='domain' id='domain' value="{{$domain.domain|escape:'html'}}" />
+				<span class="ep-hint ep-text-danger" id="domain_edit_tip" style="display:none">编辑时域名不可修改，如需变更请先删除该域名再重新绑定</span>
 			</div>
 			{{if $subdir_flag}}
 			<div class="ep-form-row">

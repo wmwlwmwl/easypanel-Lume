@@ -101,6 +101,7 @@ jQuery(document).ready(function() {
 			<div class="ep-hero-actions">
 				<a class="ep-btn-hero" href="?c=domain&amp;a=show">域名绑定</a>
 				{{if $user.cdn==0}}{{if $webftp_url}}<a class="ep-btn-hero is-ghost" href="{{$webftp_url}}">在线文件</a>{{/if}}{{/if}}
+				{{if $user.cdn==0}}{{if $user.module=='php'}}<a class="ep-btn-hero is-ghost" href="?c=phpset&amp;a=phpset">PHP设置</a>{{/if}}{{/if}}
 				{{if $module_link}}<div class="ep-hero-module">{{$module_link}}</div>{{/if}}
 			</div>
 		</div>

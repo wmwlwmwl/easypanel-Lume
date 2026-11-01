@@ -139,7 +139,8 @@ function domain_edit(val)
 			if(data.code == 0){
 				$("#domain").val(val);
 				$("#domain").attr("disabled", true);
-				$("#subdir").val(data.subdir);
+				$("#domain_edit_tip").show();
+				$("#subdir").val(data.subdir).focus();
 				$("#proto").val(data.proto);
 				$("#button_import").hide();
 				$("#button_cancel").show();
@@ -154,6 +155,7 @@ function cancel_edit()
 {
 	$("#domain").val("");
 	$("#domain").attr("disabled", false);
+	$("#domain_edit_tip").hide();
 	if($("#proto").length>0){
 		$("#subdir").val("");
 		$("#proto").val('http');
