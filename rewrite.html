@@ -57,6 +57,7 @@ function del_rewrite()
 	ep_ajax('?c=rewrites&a=del', {id:id}, {errorText:'数据加载失败', sync:false});
 }
 $(document).ready(function(){
+	var currentContent = $("#content").val();
 	$("#dir").change(function(){
 		if($(this).val()!=''){
 			window.location.href='?c=rewrites&a=show&id='+$(this).val();
@@ -64,21 +65,23 @@ $(document).ready(function(){
 	});
 	$("#rule").change(function(){
 		var name = $(this).val();
-		if(name!='0'){
-			$.ajax({
-				type:'GET',
-				dataType:'json',
-				url:'?c=rewrites&a=getRule&name='+name,
-				success:function(data) {
-					if (data.code == 0) {
-						$("#content").html(data.content);
-					}
-				},
-				error: function(){
-					alert('数据加载失败');
-				}
-			});
+		if(name=='0'){
+			$("#content").val(currentContent);
+			return;
 		}
+		$.ajax({
+			type:'GET',
+			dataType:'json',
+			url:'?c=rewrites&a=getRule&name='+name,
+			success:function(data) {
+				if (data.code == 0) {
+					$("#content").val(data.content);
+				}
+			},
+			error: function(){
+				alert('数据加载失败');
+			}
+		});
 	});
 })
 </script>

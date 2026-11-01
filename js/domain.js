@@ -13,9 +13,17 @@ function is_cname_domain(domain)
 	var target = cname_target();
 	return target !== '' && $.trim(domain).toLowerCase() === target;
 }
+function normalize_domain(domain)
+{
+	domain = $.trim(domain);
+	domain = domain.replace(/^(?:https?:\/\/|\/\/)/i, '');
+	domain = domain.replace(/\/.*$/, '');
+	return $.trim(domain);
+}
 function domain_add()
 {
-	var domain = $("#domain").val();
+	var domain = normalize_domain($("#domain").val());
+	$("#domain").val(domain);
 	var subdir = $("#subdir").val();
 	var proto = $("#proto").val();
 	if(domain == ''){
@@ -70,7 +78,7 @@ function domain_import()
 			return;
 		}
 		var row = rows[index++].split(' ');
-		var domain = row[0];
+		var domain = normalize_domain(row[0]);
 		if (!domain) {
 			next();
 			return;
@@ -193,3 +201,9 @@ function fallback_copy(text, done)
 	if (ok) done();
 	else alert('复制失败，请手动复制：' + text);
 }
+
+$(function () {
+	$("#domain").on('blur', function () {
+		this.value = normalize_domain(this.value);
+	});
+});

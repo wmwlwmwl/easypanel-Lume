@@ -4,7 +4,7 @@
 	{{include file='common/switch.html' is_on=$ssl_rewrite on_url='javascript:ssl_checkon(1)' off_url='javascript:ssl_checkon(2)'}}
 </div>
 {{/if}}
-{{if $ssl_rewrite==1||$hsts==1}}
+{{if $ssl==1||$hsts==1}}
 <div class="ep-form-row">
 	<span class="ep-form-label">HSTS</span>
 	{{include file='common/switch.html' is_on=$hsts on_url='javascript:hsts_checkon(1)' off_url='javascript:hsts_checkon(0)'}}

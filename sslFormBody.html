@@ -13,6 +13,12 @@
 			</div>
 			{{include file='sslSwitch.html'}}
 			{{include file='sslCertFields.html'}}
+			{{if $ssl==1 && (!$ssl_rewrite || !$hsts || !$http2)}}
+			<div class="ep-form-row">
+				<input type="button" class="btn btn-primary" value="一键开启 HTTPS 优化" onclick="ssl_quick_on();">
+				<span class="ep-hint">同时开启 HTTP跳转HTTPS、HSTS、HTTP2</span>
+			</div>
+			{{/if}}
 			<div class="ep-form-row">
 				<input type='submit' value='提交' class="btn btn-primary">{{if $ssl_configured}}<button type="button" class="btn btn-danger" onclick="return ssl_disable(this.form, '{{$ssl_scope}}');">关闭SSL</button>{{/if}}
 			</div>
@@ -27,5 +33,40 @@ function ssl_checkon(val)
 	var data = 'status=' + val;
 	{{if $ssl_domain}}data += '&domain=' + encodeURIComponent($("#domain").val());{{/if}}
 	functoin_checkon('?c=ssl&a={{$sslRewriteAction}}',data);
+}
+
+function ssl_quick_on()
+{
+	var domain = {{if $ssl_domain}}$("#domain").val(){{else}}''{{/if}};
+	var query = domain ? '&domain=' + encodeURIComponent(domain) : '';
+	var steps = [];
+	{{if !$ssl_rewrite}}steps.push({url: '?c=ssl&a={{$sslRewriteAction}}', data: 'status=1' + query});{{/if}}
+	{{if !$hsts}}steps.push({url: '?c=ssl&a=hsts', data: 'status=1' + query});{{/if}}
+	{{if !$http2}}steps.push({url: '?c=ssl&a=http2', data: 'status=1'});{{/if}}
+	if (!steps.length) {
+		return alert('HTTP跳转HTTPS、HSTS、HTTP2 均已开启');
+	}
+	if (!confirm('将同时开启 HTTP跳转HTTPS、HSTS、HTTP2，是否继续？')) {
+		return;
+	}
+	var run = function (i) {
+		if (i >= steps.length) {
+			alert('HTTPS 优化已开启');
+			window.location.reload();
+			return;
+		}
+		$.post(steps[i].url, steps[i].data, function (msg) {
+			if ($.trim(msg) !== '成功') {
+				alert(msg);
+				window.location.reload();
+				return;
+			}
+			run(i + 1);
+		}, 'text').fail(function () {
+			alert('请求失败，请稍后重试');
+			window.location.reload();
+		});
+	};
+	run(0);
 }
 </script>
