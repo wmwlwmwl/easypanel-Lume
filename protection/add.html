@@ -1,0 +1,61 @@
+<script src='{{$STATIC}}js/protection.js?v=5'></script>
+<div class="main">
+    <div class="public_pa">防盗链设置</div>
+	<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">防盗链开关</span>
+				{{include file='common/switch.html' is_on=$name on_url='javascript:protection_checkon(1)' off_url='javascript:protection_checkon(0)'}}
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">保护路径</span>
+				<input name='path' id='path' size='40' />
+				<span class="ep-hint">正则匹配，例：^/download</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">URL后缀</span>
+				<input name="file_ext" id="file_ext" size="40" value="jpg|jpeg|gif|png|js|css" />
+				<span class="ep-hint">用|分隔，留空不限制</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">合法来源url</span>
+				<input name='referer' id='referer' size='40' />
+				<span class="ep-hint">正则，不写表示相同主机</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">允许空来源请求</span>
+				<input type="checkbox" name="allow_empty" id="allow_empty" value="1" />
+				<span class="ep-hint">允许未发送 Referer 或 Referer 为空的请求</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">非法请求重定向</span>
+				<input name='redirect' id='redirect' size='40' />
+				<span class="ep-hint">不写则默认拒绝处理</span>
+			</div>
+			<div class="ep-form-row">
+				<a class="btn btn-default" href="javascript:protection_empty();">清空设置</a>
+				<input type='button' onclick='protection_add()' value='提交' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>操作</th>
+			<th>目录规则</th>
+			<th>URL后缀</th>
+			<th>空来源请求</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{foreach from=$paths item=row}}
+	<tr>
+		<td>[<a href='javascript:protection_del({{$row.id}})'>删除</a>]</td>
+		<td>{{$row.path|escape:'html'}}</td>
+		<td>{{if $row.file_ext}}{{$row.file_ext|escape:'html'}}{{else}}不限{{/if}}</td>
+		<td>{{if $row.allow_empty}}允许{{else}}不允许{{/if}}</td>
+	</tr>
+	{{/foreach}}
+	</tbody>
+</table>
+</div>

@@ -1,0 +1,38 @@
+<script src='{{$STATIC}}js/antiupload.js?v=2'></script>
+
+<div class="main">
+    <div class="public_pa">防木马上传</div>
+	<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">上传拦截开关</span>
+				{{include file='common/switch.html' is_on=$autiupload_start on_url='javascript:antiupload_checkon(0)' off_url='javascript:antiupload_checkon(1)'}}
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">禁止后缀</span>
+				<input name='filename' value='php' id='filename' size="32" />
+				<span class="ep-hint">多个用逗号分隔，例：php,asp,jsp</span>
+			</div>
+			<div class="ep-form-row">
+				<a class="btn btn-default" href="javascript:antiupload_empty();">清空设置</a>
+				<input type='button' onclick='antiupload_add();' value='提交' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+<table class="table table-bordered">
+    <thead>
+	<tr>
+		<th>操作</th>
+		<th>禁止文件名</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{foreach from=$filenames item=row}}
+	<tr>
+		<td><a href="javascript:antiupload_del({{$row.id}})">删除</a></td>
+		<td>{{$row.filename}}</td>
+	</tr>
+	{{/foreach}}
+	</tbody>
+</table>
+</div>

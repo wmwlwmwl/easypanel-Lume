@@ -1,0 +1,20 @@
+<div class="main">
+	<div class="public_pa">{{if $action=='add'}}增加域名绑定{{else}}修改域名绑定{{/if}}</div>
+	<div class="ep-form-body">
+		<form name='nodeform' action="?c=domain&a={{$action}}" method="post">
+			<div class="ep-form-row">
+				<span class="ep-form-label">域名</span>
+				<input type='text' name='domain' id='domain' value="{{$domain.domain}}" />
+			</div>
+			{{if $subdir_flag}}
+			<div class="ep-form-row">
+				<span class="ep-form-label">子目录</span>
+				<input type='text' name='subdir' id='subdir' value="{{$default_subdir}}" />
+			</div>
+			{{/if}}
+			<div class="ep-form-row">
+				<input type="submit" value="确定" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>

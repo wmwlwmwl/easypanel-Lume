@@ -1,0 +1,22 @@
+<script src="{{$PSTATIC}}/style/geo-regions.js?v=1"></script>
+<script src="{{$PSTATIC}}/style/bangeo.js?v=4"></script>
+<div class="main" id="bangeo-panel" data-controller="{{$list_controller|escape:'html'}}" data-list-label="{{$list_label|escape:'html'}}">
+    <div class="public_pa">地区{{$list_label|escape:'html'}}</div>
+    <div class="ep-pad">
+        {{include file='common/switch.html' is_on=$bangeo on_url='javascript:;' off_url='javascript:;' on_attrs=' id="bangeo-toggle" data-geo-status="1"' off_attrs=' id="bangeo-toggle" data-geo-status="0"'}}
+        <form id="bangeo-form" style="margin-top:12px">
+            <label>大洲<select id="bangeo-continent" disabled><option value="">请选择大洲</option></select></label>
+            <label>国家<select id="bangeo-country" disabled><option value="">缺省</option></select></label>
+            <label>省份<select id="bangeo-province" disabled><option value="">缺省</option></select></label>
+            <button type="submit" id="bangeo-add" class="btn btn-primary" disabled>增加</button>
+        </form>
+    </div>
+    <table class="table table-bordered">
+        <thead><tr><th>操作 [<a href="javascript:;" id="bangeo-clear">清空</a>]</th><th>{{if $list_controller=='whitelist'}}允许地区{{else}}禁止地区{{/if}}</th></tr></thead>
+        <tbody>
+        {{foreach from=$regions item=row}}
+            <tr><td><a href="javascript:;" data-geo-delete="{{$row.id}}">删除</a></td><td>{{$row.region|escape:'html'}}</td></tr>
+        {{/foreach}}
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,56 @@
+<script src="{{$PSTATIC}}/style/js/highcharts.js" type="text/javascript"></script>
+<!-- 添加主题样式js文件 -->
+<script src="{{$PSTATIC}}/style/js/themes/grid.js" type="text/javascript"></script>
+<!--添加导出模式 -->
+<script src="{{$PSTATIC}}/style/js/modules/exporting.js" type="text/javascript"></script>
+<script src="{{$STATIC}}js/chart-common.js?v=1"></script>
+
+<script type="text/javascript">
+// 连接数/速率图表复用同一配置，仅标题、Y 轴与 tooltip 不同
+function epBuildChart(renderTo, title, yTitle, seriesName, formatter) {
+	var data = [], time = (new Date()).getTime(), i;
+	for (i = -100; i <= 0; i++) {
+		data.push({ x: time + i * 1000, y: 0 });
+	}
+	return new Highcharts.Chart({
+		chart: { renderTo: renderTo, defaultSeriesType: 'line' },
+		title: { text: title },
+		xAxis: { title: { text: '时间' }, type: 'datetime', tickPixelInterval: 150 },
+		yAxis: { title: { text: yTitle }, plotLines: [{ value: 0, width: 1, color: '#808080' }] },
+		tooltip: { formatter: formatter },
+		legend: { enabled: true },
+		exporting: { enabled: true },
+		series: [{ name: seriesName, data: data }]
+	});
+}
+
+var chart, chart2;
+$(function () {
+	epChartSetup();
+	chart = epBuildChart('connection', '当前网站连接数分析图', '连接数', '连接数', function () {
+		return '<b>' + this.series.name + '</b><br/>' +
+			Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' + this.y;
+	});
+	chart2 = epBuildChart('bandwith', '当前网站速度分析图', '速度', '速率', function () {
+		return '<b>' + this.series.name + '</b><br/>' +
+			Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+			epFormatBytes(this.y, { threshold: 1, units: [' B/s', ' KB/s', ' MB/s', ' GB/s'] });
+	});
+	getInfo();
+	setInterval(getInfo, 5000);
+});
+
+function getInfo() {
+	$.post("?c=capability&a=capabilityGet", { "random": Math.random() }, function (data) {
+		var time = (new Date()).getTime();
+		chart.series[0].addPoint([time, data.connect], true, true);
+		chart2.series[0].addPoint([time, data.speed], true, true);
+	}, "json");
+}
+</script>
+
+<div class="main">
+    <div class="public_pa">性能分析</div>
+	<div id="connection" class="ep-chart"></div>
+	<div id="bandwith" class="ep-chart"></div>
+</div>

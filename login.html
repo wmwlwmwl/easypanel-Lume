@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<title>网站控制面板 - easypanel</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="{{$STATIC}}style/tokens.css?v=1" type="text/css" />
+<link rel="stylesheet" href="{{$STATIC}}style/login.css?v=5" type="text/css" />
+</head>
+<body class="login-body">
+<div class="ep-login-page">
+	<div class="ep-login-card">
+		<div class="ep-login-brand">
+			<span class="ep-login-logo">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 3 8l9 5 9-5-9-5Z"></path><path d="M3 13l9 5 9-5"></path></svg>
+			</span>
+			<h1>网站控制面板</h1>
+			<p>easypanel · 安全登录</p>
+		</div>
+		<form class="ep-login-form" action="index.php?c=session&amp;a=login" method="post" name="form1">
+			<label class="ep-field">
+				<span class="ep-field-label">用户名</span>
+				<input class="ep-input" type="text" name="username" id="username" autocomplete="username" />
+			</label>
+			<label class="ep-field">
+				<span class="ep-field-label">密码</span>
+				<input class="ep-input" type="password" name="passwd" autocomplete="current-password" />
+			</label>
+			{{if $img}}
+			<label class="ep-field">
+				<span class="ep-field-label">验证码</span>
+				<span class="ep-captcha">
+					<input class="ep-input" type="text" name="imgnumber" autocomplete="off" />
+					<img src="?c=session&amp;a=initImg&amp;action=init" alt="验证码" />
+				</span>
+			</label>
+			{{/if}}
+			<button class="ep-login-btn" type="submit">登 录</button>
+		</form>
+		<div class="ep-login-foot">Powered by <a href="https://github.com/wmwlwmwl/easypanel-Lume">easypanel-Lume</a></div>
+	</div>
+</div>
+</body>
+</html>

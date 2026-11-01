@@ -1,0 +1,8 @@
+<div class="main">
+	<div class="public_pa">{{if $action=='add'}}增加自定义错误{{else}}修改自定义错误{{/if}}</div>
+	<div class="ep-form-body">
+		{{assign var='error_label' value='错误码'}}
+		{{assign var='error_hint' value='常见错误码：404 没有找到文件'}}
+		{{include file='info/errorPageForm.html'}}
+	</div>
+</div>

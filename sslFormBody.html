@@ -1,0 +1,31 @@
+
+<div class="main">
+    <div class="public_pa">
+		{{$ssl_title}} {{if $ssl==1}}<span class="ep-badge is-success">状态正常</span>{{else}}<span class="ep-badge is-danger">状态失败</span>{{/if}} [<a
+			href='https://freessl.cn/' target='_blank' rel='noreferrer'>ssl证书在线生成</a>]
+	</div>
+
+{{include file='sslCertificateInfo.html'}}
+	<div class="ep-form-body">
+		<form action='{{$ssl_action}}' method='post'>
+			<div class="ep-form-row">
+				<span class="ep-form-title">{{$ssl_intro_prefix|escape:'html'}}{{if $ssl_domain}}<span class="ep-text-danger">{{$ssl_domain|escape:'html'}}</span>{{/if}}{{$ssl_intro_suffix|escape:'html'}}{{if $ssl_domain}}<input type="hidden" name="domain" id="domain" value="{{$ssl_domain|escape:'html'}}">{{/if}}</span>
+			</div>
+			{{include file='sslSwitch.html'}}
+			{{include file='sslCertFields.html'}}
+			<div class="ep-form-row">
+				<input type='submit' value='提交' class="btn btn-primary">{{if $ssl_configured}}<button type="button" class="btn btn-danger" onclick="return ssl_disable(this.form, '{{$ssl_scope}}');">关闭SSL</button>{{/if}}
+			</div>
+			{{include file='sslAdvanced.html'}}
+		</form>
+	</div>
+</div>
+<script src="{{$STATIC}}js/ssl.js?v=5"></script>
+<script>
+function ssl_checkon(val)
+{
+	var data = 'status=' + val;
+	{{if $ssl_domain}}data += '&domain=' + encodeURIComponent($("#domain").val());{{/if}}
+	functoin_checkon('?c=ssl&a={{$sslRewriteAction}}',data);
+}
+</script>

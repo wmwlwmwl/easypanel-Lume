@@ -1,0 +1,5 @@
+{{if $is_on}}
+<a href="{{$off_url}}"{{if $off_attrs}}{{$off_attrs}}{{elseif $attrs}}{{$attrs}}{{/if}} title="{{$off_title|default:'关闭功能'}}"><span class="ep-switch is-on"></span></a>
+{{else}}
+<a href="{{$on_url}}"{{if $on_attrs}}{{$on_attrs}}{{elseif $attrs}}{{$attrs}}{{/if}} title="{{$on_title|default:'开启功能'}}"><span class="ep-switch"></span></a>
+{{/if}}

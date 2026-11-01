@@ -1,0 +1,8 @@
+{{assign var='ssl_title' value='单域名ssl证书设置'}}
+{{assign var='ssl_action' value='?c=ssl&a=domainSsl'}}
+{{assign var='ssl_scope' value='domain'}}
+{{assign var='ssl_domain' value=$domain}}
+{{assign var='ssl_intro_prefix' value='此处设置域名 '}}
+{{assign var='ssl_intro_suffix' value=' 的独立SSL证书，未单独配置证书的域名使用账号SSL证书。'}}
+{{assign var='sslRewriteAction' value='domainSslRewrite'}}
+{{include file='sslFormBody.html'}}

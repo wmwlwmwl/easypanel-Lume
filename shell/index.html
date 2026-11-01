@@ -1,0 +1,61 @@
+<link rel="stylesheet" href="{{$PSTATIC}}/style/shell.css?v=2">
+<script src="{{$PSTATIC}}/style/shell.js?v=4"></script>
+<div class="main">
+    <div class="public_pa">数据备份</div>
+	<div class="ep-form-body">
+		<form name='bakupweb' action="?c=shell&a=bakupweb" method="post" data-shell-command="1">
+			<div class="ep-form-row">
+				<span class="ep-form-title">网站备份</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">备份密码</span>
+				<input name='password' value='' placeholder='不设置密码可留空' />
+				<input type='submit' value='开始备份' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+
+{{if $user.db_quota>0 && $user.db_type!='sqlsrv'}}
+	<div class="ep-form-body">
+		<form name='mysqlout' action="?c=shell&a=mysqldumpout" method="post" data-shell-command="1">
+			<div class="ep-form-row">
+				<span class="ep-form-title">数据库备份</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">数据库密码</span>
+				<input type='password' name='passwd' id='passwd' />
+				<input type='submit' value='开始备份' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+
+	<div class="ep-form-body">
+		<form name='remotemysqldumpin' action="?c=shell&a=remotemysqldumpin" method="post" data-shell-command="1">
+			<div class="ep-form-row">
+				<span class="ep-form-title">远程数据库导入</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">远程数据库IP</span>
+				<input type='text' name='rehost' id='rehost' size='16' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">远程数据库账号</span>
+				<input type='text' name='reuser' id='reuser' size='16' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">远程数据库密码</span>
+				<input type='password' name='repasswd' id='repasswd' size='16' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">远程数据库名</span>
+				<input type='text' name='redate' id='redate' size='16' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">本地数据库密码</span>
+				<input type='password' name='passwd' id='passwd' size='16' />
+				<input type='submit' value='确定' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+{{/if}}
+</div>

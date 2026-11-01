@@ -1,0 +1,13 @@
+{{assign var='ipurl_controller' value='banip'}}
+{{assign var='ipurl_ip_title' value='IP黑名单'}}
+{{assign var='ipurl_ip_label' value='禁止IP'}}
+{{assign var='ipurl_ip_hint' value='单个：192.168.0.1　IP段：192.168.0.1/24　全部：0.0.0.0/0'}}
+{{assign var='ipurl_ip_head' value='禁止IP'}}
+{{assign var='ipurl_url_title' value='URL黑名单'}}
+{{assign var='ipurl_url_placeholder' value='留空则仅按方法拦截'}}
+{{assign var='ipurl_url_head' value='禁止URL'}}
+{{include file='banip/ipurlTable.html'}}
+
+{{if $geo_available}}
+{{include file='banip/geo.html'}}
+{{/if}}

@@ -1,0 +1,57 @@
+<script src='{{$STATIC}}js/cache.js?v=3'></script>
+
+
+<div class="main">
+    <div class="public_pa">缓存设置</div>
+		<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">缓存开关</span>
+				{{include file='common/switch.html' is_on=$at on_url='javascript:cache_checkon(1)' off_url='javascript:cache_checkon(2)'}}
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">类型</span>
+				<select name='mode' id='mode' onchange='cache_help(this.value);'>
+					<option value="file_ext">文件扩展名</option>
+					<option value="content-type">content-Type</option>
+					<option value="url">网址</option>
+				</select>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">值</span>
+				<input name="cache_value" size='32' id='cache_value' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">缓存时间</span>
+				<input name='max_age' size='8' value='120' id='max_age' />&nbsp;秒
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">强制缓存</span>
+				<input type='checkbox' name='static' value='1' id='static' />
+			</div>
+			<div class="ep-form-row">
+				<input type='button' value='提交' onclick='cache_add();' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+	<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>操作</th>
+			<th >序列</th>
+			<th>设置名称</th>
+			<th>缓存时间</th>
+			<th>值</th>
+		</tr>
+	</thead>
+		{{foreach from=$header item=row}}
+		<tr>
+			<td style="width:60px;"><a href="javascript:cache_del({{$row.id}})">删除</a></td>
+			<td style="width:30px;">{{$row.id}}</td>
+			<td style="width:160px;">{{$row.name}}</td>
+			<td style="width:160px;">{{$row.max_age}} 秒 {{if $row.static}}强制缓存{{/if}}</td>
+			<td style="width:auto">{{$row.val}}</td>
+		</tr>
+		{{/foreach}}
+	</table>
+</div>

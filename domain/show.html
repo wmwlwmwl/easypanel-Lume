@@ -1,0 +1,59 @@
+<script src='{{$STATIC}}js/domain.js?v=7'></script>
+
+<div class="main">
+	<div class="public_pa">域名绑定</div>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>操作</th>
+				<th>域名</th>
+				<th>{{if $user.cdn}}源站IP{{else}}目录{{/if}}</th>
+			</tr>
+		</thead>
+		{{foreach from=$list item=row}}
+		<tr id='{{$row.id}}t'>
+			<td>[<a href="javascript:domain_del('{{$row.name|escape:'javascript'}}')">删除</a>]{{if $ssl && $row.proto != 'tcp'}}&nbsp;[<a href="?c=ssl&a=domainSslForm&domain={{$row.name|escape:'url'}}">SSL证书</a>]{{/if}}</td>
+			<td>{{if $row.ssl}}<i style="color:#82af6f;vertical-align: -.125em;" title="域名成功设置SSL证书"><svg viewBox="64 64 896 896" fill="currentColor" width="1em" height="1em" data-icon="lock" aria-hidden="true"><path d="M832 464h-68V240c0-70.7-57.3-128-128-128H388c-70.7 0-128 57.3-128 128v224h-68c-17.7 0-32 14.3-32 32v384c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V496c0-17.7-14.3-32-32-32zM332 240c0-30.9 25.1-56 56-56h248c30.9 0 56 25.1 56 56v224H332V240zm460 600H232V536h560v304zM484 701v53c0 4.4 3.6 8 8 8h40c4.4 0 8-3.6 8-8v-53a48.01 48.01 0 1 0-56 0z"></path></svg></i>&nbsp;{{/if}}<a href='http://{{$row.name|escape:'html'}}' target='_blank'>{{$row.name|escape:'html'}}</a></td>
+			<td>{{if $user.cdn}}{{$row.value|escape:'html'}}{{else}}<a href="?c=index&a=webftp&dir={{$row.value|escape:'url'}}" title="在文件管理中打开该目录">{{if $row.value}}{{$row.value|escape:'html'}}{{else}}/{{/if}}</a>{{/if}}{{if $row.proto}}&nbsp;({{$row.proto|escape:'html'}}){{/if}}&nbsp;[<a href="javascript:domain_edit('{{$row.name|escape:'javascript'}}')">修改</a>]</td>
+		</tr>
+		{{/foreach}}
+
+	</table>
+
+		<div class="ep-form-body">
+		<form name='nodeform' action="javascript:domain_add();" method="post">
+			<div class="ep-form-row">
+				<span class="ep-form-title">增加域名绑定，在添加绑定之前请先解析域名：<span class="ep-text-danger" id="domain_note">{{$domain_note|escape:'html'}}</span><a href="javascript:copy_domain_note();" id="domain_note_copy" style="margin-left:10px;">复制</a></span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">域名</span>
+				<input type='text' size='40' name='domain' id='domain' value="{{$domain.domain|escape:'html'}}" />
+			</div>
+			{{if $subdir_flag}}
+			<div class="ep-form-row">
+				<span class="ep-form-label">{{if $user.cdn}}源站IP{{else}}目录{{/if}}</span>
+				<input type='text' name='subdir' id='subdir' value="{{$default_subdir}}" size='40' />
+			</div>
+			{{if $user.cdn}}
+			<div class="ep-form-row">
+				<span class="ep-form-label">回源协议</span>
+				<select name="proto" id="proto" onchange="if(this.value=='https'||this.value=='follow')alert('选择此项必须先在源站配置好SSL证书')">
+					<option value="http">http</option>
+					<option value="https">https</option>
+					<option value="follow">协议跟随</option>
+					{{if getRole('admin')}}<option value="tcp">tcp</option>{{/if}}
+				</select>
+			</div>
+			{{/if}}
+			{{/if}}
+			<div class="ep-form-row">
+				<input type="button" id='button' class="btn btn-primary" onclick='domain_add();' value="确定" />
+				<input type="button" id='button_import' class="btn btn-primary" onclick='domain_import_dialog();' value="批量增加" />
+				<input type="button" id='button_cancel' class="btn btn-default" style="display:none" onclick='cancel_edit();' value="取消编辑" />
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+	nodeform.domain.focus();
+</script>

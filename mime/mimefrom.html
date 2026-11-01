@@ -1,0 +1,50 @@
+<script src='{{$STATIC}}js/mime.js?v=2'></script>
+
+<div class="main">
+    <div class="public_pa">MIME设置</div>
+	<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">文件扩展名</span>
+				<input name='file_ext' size='8' class="span2" id='file_ext' />
+				<span class="ep-hint">例：php</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">MIME类型</span>
+				<input name='mime_type' class="span2" id='mime_type' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">缓存时间</span>
+				<input name='cache_time' class="span2" size='5' value='3600' id='cache_time' />&nbsp;秒
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">开启压缩</span>
+				<input type='checkbox' name='gzip' value='1' id='gzip' />
+			</div>
+			<div class="ep-form-row">
+				<input type='button' value='增加' onclick='mime_add();' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>操作</th>
+			<th>文件扩展名</th>
+			<th>MIME类型</th>
+			<th>缓存时间</th>
+			<th>是否压缩</th>
+		</tr>
+	</thead>
+	{{foreach from=$mime item=row}}
+	<tr>
+		<td><a href="javascript:del_mime('{{$row.file_ext}}')">删除</a></td>
+		<td>{{$row.file_ext}}</td>
+		<td>{{$row.mime_type}}</td>
+		<td>{{$row.cache_time}} 秒</td>
+		<td>{{if $row.gzip==1}}是{{else}}否{{/if}}</td>
+	</tr>
+	{{/foreach}}
+</table>
+</div>

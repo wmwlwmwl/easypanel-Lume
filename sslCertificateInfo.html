@@ -1,0 +1,29 @@
+{{if $certificate_info}}
+<table class="table table-bordered" style="table-layout:fixed;">
+	{{if $certificate_info.error}}
+	<tr><td class="ep-text-danger">{{$certificate_info.error|escape:'html'}}</td></tr>
+	{{else}}
+	<tr>
+		<th style="width:120px;">证书品牌</th>
+		<td style="word-wrap:break-word;">{{$certificate_info.brand|escape:'html'}}</td>
+	</tr>
+	<tr>
+		<th>证书域名</th>
+		<td style="word-wrap:break-word;">{{$certificate_info.domains|escape:'html'}}{{if $certificate_info.domain_mismatch}} <span class="ep-badge is-danger">不匹配</span>{{/if}}</td>
+	</tr>
+	<tr>
+		<th>到期时间</th>
+		<td>
+			<span{{if $certificate_info.expired}} class="ep-text-danger"{{/if}}>{{$certificate_info.expires|escape:'html'}}</span>
+			{{if $certificate_info.expired}}
+			<span class="ep-badge is-danger">已到期</span>
+			{{elseif $certificate_info.not_yet_valid}}
+			<span class="ep-badge is-warning">尚未生效</span>
+			{{else}}
+			<span class="ep-badge is-success">有效期内</span>
+			{{/if}}
+		</td>
+	</tr>
+	{{/if}}
+</table>
+{{/if}}

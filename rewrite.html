@@ -1,0 +1,84 @@
+
+<div class="main">
+    <div class="public_pa">伪静态设置</div>
+	<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">网站目录</span>
+				<select name='id' id='dir'>
+					{{foreach from=$paths key=id item=row}}<option value="{{$id}}" {{if $id==$pathid}}selected{{/if}}>{{$row|escape:'html'}}</option>{{/foreach}}
+				</select>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">规则选择</span>
+				<select id='rule'>
+					<option value="0">0.当前</option>{{foreach from=$rules item=row}}<option value="{{$row}}">{{$row}}</option>{{/foreach}}
+				</select>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">规则内容</span>
+				<textarea name='content' id='content' cols='80' rows='15' class="span7" placeholder="">{{$content|escape:'html'}}</textarea>
+				<span class="ep-hint ep-text-danger">支持 <b>Apache</b> 的伪静态规则</span>
+			</div>
+			<div class="ep-form-row">
+				<input type='button' value='保存' class="btn btn-primary" onclick='edit_rewrite();'><input type='button' value='重置' class="btn btn-default" onclick='del_rewrite();'>
+			</div>
+			<div class="ep-form-row">
+				<div class="ep-hint">
+				<ul>
+					<li>请选择您的应用，若设置伪静态后，网站无法正常访问，请尝试点击重置</li>
+					<li>您可以对伪静态规则进行修改，修改完后保存即可。</li>
+				</ul>
+				</div>
+			</div>
+		</form>
+	</div>
+
+</div>
+<script>
+function edit_rewrite()
+{
+	var id = $("#dir").val();
+	var content = $("#content").val();
+	if(id == ''){
+		return alert('请选择网站目录');
+	}
+	ep_ajax('?c=rewrites&a=edit', {id:id, content:content}, {successMessage:'保存成功！', errorText:'数据加载失败', sync:false});
+}
+function del_rewrite()
+{
+	var id = $("#dir").val();
+	if(id == ''){
+		return alert('请选择网站目录');
+	}
+	if (!confirm("确定删除伪静态规则吗?")) {
+		return;
+	}
+	ep_ajax('?c=rewrites&a=del', {id:id}, {errorText:'数据加载失败', sync:false});
+}
+$(document).ready(function(){
+	$("#dir").change(function(){
+		if($(this).val()!=''){
+			window.location.href='?c=rewrites&a=show&id='+$(this).val();
+		}
+	});
+	$("#rule").change(function(){
+		var name = $(this).val();
+		if(name!='0'){
+			$.ajax({
+				type:'GET',
+				dataType:'json',
+				url:'?c=rewrites&a=getRule&name='+name,
+				success:function(data) {
+					if (data.code == 0) {
+						$("#content").html(data.content);
+					}
+				},
+				error: function(){
+					alert('数据加载失败');
+				}
+			});
+		}
+	});
+})
+</script>

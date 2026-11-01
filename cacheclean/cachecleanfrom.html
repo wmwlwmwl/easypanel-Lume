@@ -1,0 +1,58 @@
+<script>
+	function cache_clean() {
+		var url = $("#url").val();
+		if (url == "") {
+			return alert('值不能为空');
+		}
+		var url_arr = url.split("\n");
+		var clean_url = "";
+		for (var i = 0; i < url_arr.length; i++) {
+			if (url_arr[i].substr(0, 7) != 'http://' && url_arr[i].substr(0, 8) != 'https://') {
+				return alert("输入错误，请检查每个url前面必需有http://");
+			}
+			if (url_arr[i].slice(-1) == '*') {
+				url_arr[i] = '3' + url_arr[i].slice(0, -1);
+			}
+			clean_url += url_arr[i] + ', ';
+		}
+		ep_ajax('?c=cacheclean&a=cacheclean', {url: clean_url}, {raw: true, reload: false, sync: false});
+	}
+	function domain_cache_clean() {
+		var domain = $("#domain").val();
+		if (domain == "") {
+			return alert('请先选择一个域名');
+		}
+		ep_ajax('?c=cacheclean&a=cacheclean', {url: '3http://' + domain + '/, 3https://' + domain + '/, '}, {raw: true, reload: false, sync: false});
+	}
+</script>
+<div class="main">
+    <div class="public_pa">清除缓存</div>
+	<div class="ep-form-body">
+		<form method='post'>
+			<div class="ep-form-row">
+				<span class="ep-form-title">清除整个域名缓存</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">选择域名</span>
+				<select name="domain" id="domain">
+				{{foreach from=$list item=row}}<option value="{{$row}}">{{$row}}</option>{{/foreach}}
+				</select>
+				<input type='button' value='提交' onclick='domain_cache_clean();' class="btn btn-primary" />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-title">清除单个URL网址缓存</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">URL</span>
+				<textarea name="url" id='url' class="span5" cols='62' rows='6'></textarea>
+				<span class="ep-hint">每行一个url，例：http://www.baidu.com/ 或 http://www.baidu.com/web/，支持通配符*</span>
+			</div>
+			<div class="ep-form-row">
+				<input type='button' value='提交' onclick='cache_clean();' class="btn btn-primary" />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-hint">清除节点缓存之后可能还需要清除浏览器的缓存或按Ctrl+F5刷新页面才能看到最新的页面</span>
+			</div>
+		</form>
+	</div>
+</div>

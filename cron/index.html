@@ -1,0 +1,158 @@
+<div class="main">
+	<div class="public_pa">计划任务设置 [<a href='?c=cron&a=sync'>重建计划任务</a>]</div>
+	{{if $crons}}
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>操作</th>
+				<th>时间</th>
+				<th>网址</th>
+			</tr>
+		</thead>
+		{{foreach from=$crons item=cron}}
+		<tr>
+			<td>[<a href='?c=cron&a=del&id={{$cron.id}}'>删除</a>]</td>
+			<td class="ep-cron-cell" data-cron="{{$cron.min}} {{$cron.hour}} {{$cron.day}} {{$cron.month}} {{$cron.mday}}">
+				<span class="ep-cron-desc">{{$cron.min}} {{$cron.hour}} {{$cron.day}} {{$cron.month}} {{$cron.mday}}</span>
+				<span class="ep-hint ep-cron-raw"></span>
+			</td>
+			<td>{{$cron.cmd}}</td>
+		</tr>
+		{{/foreach}}
+	</table>
+	{{else}}
+	<div class="ep-empty">暂无计划任务，请在下方添加</div>
+	{{/if}}
+	<div class="ep-form-body">
+		<form action='?c=cron&a=add' method='post' onsubmit="return check_cron();">
+			<div class="ep-form-row">
+				<span class="ep-form-title">添加任务</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">执行周期</span>
+				<select id="period_type">
+					<option value="* * * * *">每分钟</option>
+					<option value="every-n-minutes">每 N 分钟</option>
+					<option value="every-n-hours">每 N 小时</option>
+					<option value="0 * * * *">每小时（整点）</option>
+					<option value="0 0 * * *">每天 0:00</option>
+					<option value="0 0 * * 1">每周一 0:00</option>
+					<option value="0 0 1 * *">每月 1 日 0:00</option>
+					<option value="custom">自定义表达式</option>
+				</select>
+				<span class="ep-hint" id="cron_preview">表达式：* * * * *　每分钟执行</span>
+			</div>
+			<div class="ep-form-row" id="n_min_row" style="display:none;">
+				<span class="ep-form-label">分钟间隔</span>
+				<input type="number" id="p_n_minutes" min="1" max="59" value="5" style="width:90px;" />
+				<span class="ep-hint">分钟</span>
+			</div>
+			<div class="ep-form-row" id="n_hour_row" style="display:none;">
+				<span class="ep-form-label">小时间隔</span>
+				<input type="number" id="p_n_hours" min="1" max="23" value="2" style="width:90px;" />
+				<span class="ep-hint">小时</span>
+			</div>
+			<div class="ep-form-row" id="custom_row" style="display:none;">
+				<span class="ep-form-label">表达式</span>
+				<input id="cron_custom" placeholder="分 时 日 月 周，如 0 3 * * *" />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">网址</span>
+				<input name='cmd' class="span5" placeholder="要执行的网址或命令" />
+			</div>
+			<div class="ep-form-row">
+				<input type="hidden" name="t" id="cron_value" value="* * * * *" />
+				<input type='submit' value='增加' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+<script>
+(function(){
+	var sel=document.getElementById('period_type');
+	var hidden=document.getElementById('cron_value');
+	var preview=document.getElementById('cron_preview');
+	var nMinRow=document.getElementById('n_min_row');
+	var nHourRow=document.getElementById('n_hour_row');
+	var customRow=document.getElementById('custom_row');
+	var nMin=document.getElementById('p_n_minutes');
+	var nHour=document.getElementById('p_n_hours');
+	var custom=document.getElementById('cron_custom');
+	function num(el,min,max,def){
+		var v=parseInt(el.value,10);
+		if(isNaN(v)||v<min||v>max){ v=def; el.value=v; }
+		return v;
+	}
+	function sync(){
+		var t=sel.value;
+		nMinRow.style.display = t==='every-n-minutes' ? '' : 'none';
+		nHourRow.style.display = t==='every-n-hours' ? '' : 'none';
+		customRow.style.display = t==='custom' ? '' : 'none';
+		var cron='', desc='';
+		if(t==='every-n-minutes'){
+			var n=num(nMin,1,59,5); cron='*/'+n+' * * * *'; desc='每 '+n+' 分钟执行';
+		} else if(t==='every-n-hours'){
+			var h=num(nHour,1,23,2); cron='0 */'+h+' * * *'; desc='每 '+h+' 小时执行';
+		} else if(t==='custom'){
+			cron=custom.value.replace(/^\s+/,'').replace(/\s+/g,' '); desc='自定义表达式';
+			var parts=cron.split(/\s+/).filter(function(x){return x!=='';});
+			if(cron && parts.length!==5){ desc='格式错误：应为 5 个字段（分 时 日 月 周）'; }
+		} else {
+			cron=t; desc=sel.options[sel.selectedIndex].text+'执行';
+		}
+		hidden.value=cron;
+		preview.textContent='表达式：'+(cron||'（请填写）')+(cron?'　'+desc:'');
+	}
+	sel.addEventListener('change',sync);
+	nMin.addEventListener('input',sync);
+	nHour.addEventListener('input',sync);
+	custom.addEventListener('input',sync);
+	sync();
+})();
+function epPad(n){ n=String(n); return n.length<2?'0'+n:n; }
+function epDescribeCron(raw){
+	var p=raw.split(' ');
+	if(p.length!==5) return '自定义';
+	var m=p[0],h=p[1],d=p[2],mo=p[3],w=p[4];
+	if(m==='*'&&h==='*'&&d==='*'&&mo==='*'&&w==='*') return '每分钟';
+	if(/^\*\/[0-9]+$/.test(m)&&h==='*'&&d==='*'&&mo==='*'&&w==='*') return '每 '+m.slice(2)+' 分钟';
+	if(m!=='*'&&/^\*\/[0-9]+$/.test(h)&&d==='*'&&mo==='*'&&w==='*') return '每 '+h.slice(2)+' 小时';
+	if(m!=='*'&&h==='*'&&d==='*'&&mo==='*'&&w==='*') return '每小时第 '+m+' 分';
+	if(m!=='*'&&h!=='*'&&d==='*'&&mo==='*'&&w!=='*'){
+		var wn=['日','一','二','三','四','五','六'][parseInt(w,10)];
+		return '每周'+(wn||w)+' '+h+':'+epPad(m);
+	}
+	if(m!=='*'&&h!=='*'&&d==='*'&&mo==='*'&&w==='*') return '每天 '+h+':'+epPad(m);
+	if(m!=='*'&&h!=='*'&&d!=='*'&&mo==='*'&&w==='*') return '每月 '+d+' 日 '+h+':'+epPad(m);
+	if(m!=='*'&&h!=='*'&&d!=='*'&&mo!=='*'&&w==='*') return '每年 '+mo+' 月 '+d+' 日 '+h+':'+epPad(m);
+	return '自定义';
+}
+(function(){
+	var cells=document.querySelectorAll('.ep-cron-cell');
+	for(var i=0;i<cells.length;i++){
+		var raw=(cells[i].getAttribute('data-cron')||'').replace(/^\s+/,'').replace(/\s+/g,' ');
+		var desc=cells[i].querySelector('.ep-cron-desc');
+		var rawEl=cells[i].querySelector('.ep-cron-raw');
+		if(desc && raw){ desc.textContent=epDescribeCron(raw); }
+		if(rawEl){ rawEl.textContent=raw; }
+	}
+})();
+function check_cron(){
+	var t=document.getElementById('period_type').value;
+	if(t==='custom'){
+		var v=document.getElementById('cron_value').value;
+		if(v===''){
+			alert('请填写自定义表达式');
+			document.getElementById('cron_custom').focus();
+			return false;
+		}
+		var parts=v.split(/\s+/).filter(function(x){return x!=='';});
+		if(parts.length!==5){
+			alert('表达式格式不正确：应为 5 个字段（分 时 日 月 周），用空格分隔，例如：* * * * *');
+			document.getElementById('cron_custom').focus();
+			return false;
+		}
+	}
+	return true;
+}
+</script>

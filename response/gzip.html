@@ -1,0 +1,31 @@
+<script type="text/javascript">
+	function submit() {
+		ep_ajax("?c=response&a=addGzip", {gzip: $("#gzip").val()}, {type: "get", raw: true, reload: false, sync: false});
+	}
+	function del() {
+		if (!confirm("确认删除该项设置？")) {
+			return;
+		}
+		ep_ajax("?c=response&a=delGzip", null, {type: "get", raw: true, reload: false, sync: false});
+	}
+</script>
+
+<div class="main">
+    <div class="public_pa">开启页面Gzip压缩</div>
+		<div class="ep-form-body">
+		<form action='javascript:submit();' method='post'>
+			<div class="ep-form-row">
+				<span class="ep-form-title">注：此功能将服务器数据压缩后发送给浏览者，这将有助于提高您的网页打开速度！</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">匹配Content-Type</span>
+				<input name='gzip' id='gzip' value='(text/css)|(text/ht*)|(javascript)' />
+				<span class="ep-hint">支持正则表达式，如果不熟悉设置，默认即可！</span>
+			</div>
+			<div class="ep-form-row">
+				<input type='submit' value='开启' class="btn btn-primary" />
+				<input type="button" onclick="javascript:del();" value="清除设置" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,41 @@
+<script src='{{$STATIC}}js/indexfile.js?v=2'></script>
+
+<div class="main">
+    <div class="public_pa">默认首页文件</div>
+	<div class="ep-form-body">
+		<form name='from'>
+			<div class="ep-form-row">
+				<span class="ep-form-label">文件名</span>
+				<input name="file" size='16' id='file' />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">先后顺序</span>
+				<input name='id' value='100' id='id' />
+				<span class="ep-hint">注：数字小优先</span>
+			</div>
+			<div class="ep-form-row">
+				<input type='button' value='提交' onclick='indexfile_add();' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+<table class="table table-bordered">
+    <thead>
+	<tr>
+		<th>操作</th>
+		<th>文件名</th>
+		<th>顺序</th>
+	</tr>
+	</thead>
+	{{foreach from=$in item=row}}
+	<tr>
+		<td><a href="javascript:indexfile_del('{{$row.name}}')">删除</a></td>
+		<td>{{$row.name}}</td>
+		<td>{{$row.value}}</td>
+	</tr>
+	{{/foreach}}
+</table>
+</div>
+
+<script>
+	from.file.focus();
+</script>

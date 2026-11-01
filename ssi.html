@@ -1,0 +1,61 @@
+<script>
+	function ssi_del(name) {
+		if (confirm("确认删除吗？") == false) {
+			return;
+		}
+		window.location = "?c=ssi&a=del&name=" + name;
+	}
+</script>
+<div class="main">
+    <div class="public_pa">SSI设置</div>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>操作</th>
+			<th>顺序</th>
+			<th>映射</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{foreach from=$path_map item=row}}
+	<tr>
+		<td>[<a href="javascript:ssi_del('0,{{$row.name}}')">删除</a>]</td>
+		<td>{{$row.id}}</td>
+		<td>路径：{{$row.rawname}}</td>
+	</tr>
+	{{/foreach}} {{foreach from=$file_map item=row}}
+	<tr>
+		<td>[<a href="javascript:ssi_del('1,{{$row.name}}')">删除</a>]</td>
+		<td>{{$row.id}}</td>
+		<td>扩展名：{{$row.rawname}}</td>
+	</tr>
+	{{/foreach}}
+	</tbody>
+</table>
+
+	<div class="ep-form-body">
+		<form action="?c=ssi&a=add" method="post">
+			<div class="ep-form-row">
+				<span class="ep-form-title">增加SSI映射</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">类型</span>
+				<select name='file_ext' class="span2">
+					<option value='1'>文件扩展名</option>
+					<option value='0'>路径</option>
+				</select>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">值</span>
+				<input type='text' name='value' class="span2" />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">顺序号</span>
+				<input type='text' name='id' value='100' size=6 class="span1" />
+			</div>
+			<div class="ep-form-row">
+				<input type="submit" value="确定" class="btn btn-primary">
+			</div>
+		</form>
+	</div>
+</div>

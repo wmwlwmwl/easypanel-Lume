@@ -1,0 +1,25 @@
+{{if $ssl==1||$ssl_rewrite==1}}
+<div class="ep-form-row">
+	<span class="ep-form-label">HTTP跳转HTTPS</span>
+	{{include file='common/switch.html' is_on=$ssl_rewrite on_url='javascript:ssl_checkon(1)' off_url='javascript:ssl_checkon(2)'}}
+</div>
+{{/if}}
+{{if $ssl_rewrite==1||$hsts==1}}
+<div class="ep-form-row">
+	<span class="ep-form-label">HSTS</span>
+	{{include file='common/switch.html' is_on=$hsts on_url='javascript:hsts_checkon(1)' off_url='javascript:hsts_checkon(0)'}}
+	<span class="ep-hint">强制浏览器后续访问时使用HTTPS，开启前请确保HTTPS可正常访问</span>
+</div>
+{{/if}}
+{{if $ssl==1||$http2==1}}
+<div class="ep-form-row">
+	<span class="ep-form-label">HTTP2</span>
+	{{include file='common/switch.html' is_on=$http2 on_url='javascript:http2_checkon(1)' off_url='javascript:http2_checkon(0)'}}
+</div>
+{{/if}}
+{{if $support_http3&&($ssl==1||$http3==1)}}
+<div class="ep-form-row">
+	<span class="ep-form-label">HTTP3(QUIC)</span>
+	{{include file='common/switch.html' is_on=$http3 on_url='javascript:http3_checkon(1)' off_url='javascript:http3_checkon(0)'}}
+</div>
+{{/if}}

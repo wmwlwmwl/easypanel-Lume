@@ -1,0 +1,102 @@
+
+<div class="main">
+    <div class="public_pa">
+		切换PHP版本
+	</div>
+
+		<div class="ep-form-body">
+		<form action="?c=phpset&a=change" method="POST" onsubmit="return change_version()">
+			<div class="ep-form-row">
+				<span class="ep-form-label">当前版本</span>
+				<span>{{$version}}</span>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">切换版本</span>
+				<select name="v" id="v">
+				{{foreach from=$versions key=key item=row}}
+				<option value="{{$key}}" {{if $version==$row}}selected{{/if}}>{{$row}}</option>
+				{{/foreach}}
+				</select>
+				<input value="确定" type="submit" class="btn btn-primary">
+			</div>
+			<div class="ep-form-row" {{if strncasecmp(PHP_OS, 'WIN', 3) == 0}}style="display:none"{{/if}}>
+				<span class="ep-hint">提示：切换版本之后下方自定义的PHP环境设置会重置</span>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="main" {{if strncasecmp(PHP_OS, 'WIN', 3) == 0}}style="display:none"{{/if}}>
+    <div class="public_pa">
+		{{$version}} 环境设置
+	</div>
+		<div class="ep-form-body">
+		<form action='?c=phpset&a=edit' method='post' onsubmit="return edit_submit()" id="form-store">
+			<div class="ep-form-row">
+				<span class="ep-form-title">PHP扩展开关</span>
+			</div>
+			{{foreach from=$extlist key=key item=row}}
+			<div class="ep-form-row">
+				<span class="ep-form-label">{{$row.name}}</span>
+				<label><input name='ext[{{$key}}]' type='radio' value='0' {{if $row.value==0}}checked{{/if}}/>关闭</label>
+				<label><input name='ext[{{$key}}]' type='radio' value='1' {{if $row.value==1}}checked{{/if}}/>开启</label>
+				<span class="ep-hint">{{$row.description}}</span>
+			</div>
+			{{/foreach}}
+			<div class="ep-form-row">
+				<span class="ep-form-title">PHP参数设置</span>
+			</div>
+			{{foreach from=$configlist key=key item=row}}
+			<div class="ep-form-row">
+				<span class="ep-form-label">{{$key}}</span>
+				{{if $row.type=='switch'}}
+				<label><input name='config[{{$key}}]' type='radio' value='0' {{if $row.value==0}}checked{{/if}}/>关闭</label>
+				<label><input name='config[{{$key}}]' type='radio' value='1' {{if $row.value==1}}checked{{/if}}/>开启</label>
+				{{elseif $row.type=='number'}}
+				<input name="config[{{$key}}]" type='number' class="wid_tpl" value="{{$row.value}}" {{if $row.maxlimit>0}}max="{{$row.maxlimit}}"{{/if}} {{if $row.minlimit>0}}min="{{$row.minlimit}}"{{/if}}>
+				{{elseif $row.type=='number-M'}}
+				<input name="config[{{$key}}]" type='number' class="wid_tpl" value="{{$row.value}}" {{if $row.maxlimit>0}}max="{{$row.maxlimit}}"{{/if}} {{if $row.minlimit>0}}min="{{$row.minlimit}}"{{/if}}>M
+				{{else}}
+				不支持的参数设置
+				{{/if}}
+				<span class="ep-hint">{{$row.description}}</span>
+			</div>
+			{{/foreach}}
+			<div class="ep-form-row">
+				<input type='submit' class="btn btn-primary" value='提交'>
+				<input type="button" value="重置" class="btn btn-default" onclick="reset_ini()">
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-hint">
+				<ul>
+					<li>提交设置后会自动重启网站进程。</li>
+					<li>部分PHP扩展之间会产生冲突，请按需开启，如果都开启网站可能会出现504错误。</li>
+				</ul>
+				</span>
+			</div>
+		</form>
+	</div>
+</div>
+
+<script>
+function change_version()
+{
+	var v = $("#v").val();
+	if(v=="")return;
+	ep_ajax("?c=phpset&a=change", {v:v}, {raw:true, sync:false});
+	return false;
+}
+function edit_submit(){
+	ep_ajax("?c=phpset&a=edit", $("#form-store").serialize(), {raw:true, reload:false, sync:false, onSuccess:function(msg){
+		if (msg == "修改成功") {
+			window.location.reload();
+		}
+	}});
+	return false;
+}
+function reset_ini()
+{
+	if (!confirm("确定重置PHP环境设置吗?"))return;
+	ep_ajax('?c=phpset&a=reset', null, {type:'get', sync:false});
+}
+</script>

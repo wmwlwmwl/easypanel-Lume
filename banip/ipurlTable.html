@@ -1,0 +1,86 @@
+<script>window.epListController = '{{$ipurl_controller|escape:'javascript'}}';</script>
+<script src='{{$STATIC}}js/banip.js?v=5'></script>
+<div class="main">
+    <div class="public_pa">{{$ipurl_ip_title|escape:'html'}}</div>
+	<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">{{$ipurl_ip_title|escape:'html'}}开关</span>
+				{{include file='common/switch.html' is_on=$banip on_url='javascript:banip_checkon(1)' off_url='javascript:banip_checkon(2)'}}
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">{{$ipurl_ip_label|escape:'html'}}</span>
+				<input name='ip' id='ip' size="15" />
+				<input type='button' onclick='banip_add();' value='增加' class="btn btn-primary" />
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-hint">{{$ipurl_ip_hint|escape:'html'}}</span>
+			</div>
+		</form>
+	</div>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>操作&nbsp;[<a href="javascript:banip_del_all()">清空</a>]</th>
+			<th>{{$ipurl_ip_head|escape:'html'}}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{foreach from=$ips item=row}}
+	<tr>
+		<td><a href="javascript:banip_del({{$row.id}})">删除</a></td>
+		<td>{{$row.ip|escape:'html'}}</td>
+	</tr>
+	{{/foreach}}
+	</tbody>
+</table>
+</div>
+
+<div class="main">
+    <div class="public_pa">{{$ipurl_url_title|escape:'html'}}</div>
+	<div class="ep-form-body">
+		<form>
+			<div class="ep-form-row">
+				<span class="ep-form-label">{{$ipurl_url_title|escape:'html'}}开关</span>
+				{{include file='common/switch.html' is_on=$banurl on_url='javascript:banurl_checkon(1)' off_url='javascript:banurl_checkon(2)'}}
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">URL</span>
+				<input name='url' id='url' style="width: 50%;" placeholder="{{$ipurl_url_placeholder|escape:'html'}}"/>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">方法</span>
+				<select name='meth' id='meth'>
+                    <option value="">全部</option>
+                    {{foreach from=$request_methods item=method}}
+                    <option value="{{$method}}">{{$method}}</option>
+                    {{/foreach}}
+                    {{foreach from=$request_methods item=method}}
+                    <option value="!{{$method}}">!{{$method}}</option>
+                    {{/foreach}}
+                </select>
+				<input type='button' onclick='banurl_add();' value='增加' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>操作&nbsp;[<a href="javascript:banurl_del_all()">清空</a>]</th>
+			<th>请求方法</th>
+			<th>{{$ipurl_url_head|escape:'html'}}</th>
+		</tr>
+	</thead>
+	<tbody>
+	{{foreach from=$urls item=row}}
+	<tr>
+		<td><a href="javascript:banurl_del({{$row.id}})">删除</a></td>
+		<td>{{$row.meth|escape:'html'}}</td>
+		<td>{{if $row.url==''}}全部URL{{else}}{{$row.url|escape:'html'}}{{/if}}</td>
+	</tr>
+	{{/foreach}}
+	</tbody>
+</table>
+</div>

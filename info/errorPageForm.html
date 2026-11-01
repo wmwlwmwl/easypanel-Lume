@@ -1,0 +1,14 @@
+<form name='nodeform' action="?c=info&a=addErrorPage" method="post">
+	<div class="ep-form-row">
+		<span class="ep-form-label">{{$error_label|escape:'html'}}</span>
+		<input type='text' name='name' value="{{$info.name|escape:'html'}}" size='6' />
+		<span class="ep-hint">{{$error_hint|escape:'html'}}</span>
+	</div>
+	<div class="ep-form-row">
+		<span class="ep-form-label">URL</span>
+		<input type='text' name='value' value="{{$info.value|escape:'html'}}" size="50" />
+	</div>
+	<div class="ep-form-row">
+		<input type="submit" value="确定" class="btn btn-primary" />
+	</div>
+</form>

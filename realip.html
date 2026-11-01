@@ -1,0 +1,29 @@
+<script type="text/javascript" src="{{$STATIC}}js/realip.js?v=3"></script>
+<div class="main">
+    <div class="public_pa">CDN真实IP获取</div>
+    	<div class="ep-form-body">
+		<form id="realip-form" action="?c=realip&a=save" method="post" onsubmit="return realip_save(this);">
+			<div class="ep-form-row">
+				<span class="ep-form-label">真实IP Header</span>
+				<select name="header" onchange="realip_header_changed(this.form);">
+					<option value="" {{if !$realip.enabled}}selected="selected"{{/if}}>不开启</option>
+					{{foreach from=$realip_headers item=header}}
+					<option value="{{$header|escape:'html'}}" {{if $realip.enabled&&$realip.header==$header}}selected="selected"{{/if}}>{{$header|escape:'html'}}</option>
+					{{/foreach}}
+					<option value="__custom__" {{if $realip.custom}}selected="selected"{{/if}}>自定义</option>
+				</select>
+			</div>
+			<div class="ep-form-row" id="realip-custom-row" {{if !$realip.custom}}style="display:none;"{{/if}}>
+				<span class="ep-form-label">自定义Header</span>
+				<input type="text" name="custom_header" value="{{if $realip.custom}}{{$realip.header|escape:'html'}}{{/if}}" placeholder="例如 X-Client-IP" {{if $realip.custom}}required="required"{{else}}disabled="disabled"{{/if}}>
+			</div>
+			<div class="ep-form-row">
+				<input type="submit" value="保存设置" class="btn btn-primary">
+			</div>
+		</form>
+	</div>
+    <div class="ep-hint ep-pad">
+        <p>站点使用CDN或反向代理时，可开启此功能，并选择CDN传递真实访客IP的Header，黑白名单/防CC等按IP的功能即按真实IP匹配。</p>
+        <p>请确保CDN会覆盖所选Header，避免访客伪造IP；选「不开启」并保存即关闭。</p>
+    </div>
+</div>

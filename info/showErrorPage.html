@@ -1,0 +1,31 @@
+<div class="main">
+    <div class="public_pa">错误定义</div>
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th>操作</th>
+				<th>错误类型</th>
+				<th>url</th>
+			</tr>
+		</thead>
+		{{foreach from=$list item=row}}
+		<tr>
+			<td>[<a href="javascript:if(confirm('确定删除{{$row.name}}？')){location='?c=info&a=delErrorPage&name={{$row.name}}';}" title="删除域名">删除</a>]</td>
+			<td>{{$row.name}}</td>
+			<td>{{$row.value}}</td>
+		</tr>
+		{{/foreach}}
+		<tr>
+			<td colspan="3">共计 {{$sum}} 条记录</td>
+		</tr>
+	</table>
+
+		<div class="ep-form-body">
+			<div class="ep-form-row">
+				<span class="ep-form-title">{{if $action=='add'}}增加自定义错误{{else}}修改自定义错误{{/if}}</span>
+			</div>
+			{{assign var='error_label' value='错误类型'}}
+			{{assign var='error_hint' value='常见错误类型：404 - 找不到页面'}}
+			{{include file='info/errorPageForm.html'}}
+		</div>
+</div>

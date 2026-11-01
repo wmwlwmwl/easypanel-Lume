@@ -1,0 +1,51 @@
+<script src='{{$STATIC}}js/antisql.js?v=5'></script>
+
+
+<div class="main">
+    <div class="public_pa">参数过滤</div>
+	<div class="ep-form-body">
+		<form name='form'>
+			<div class="ep-form-row">
+				<span class="ep-form-label">参数过滤开关</span>
+				{{include file='common/switch.html' is_on=$at on_url='javascript:antisql_checkon(1)' off_url='javascript:antisql_checkon(2)'}}
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">禁止参数值</span>
+				<input name='param_value' size='62' class="span6" id='param'>
+				<a href='javascript:antisql_help();' class="ep-text-danger">帮助?</a>
+			</div>
+			<div class="ep-form-row">
+				<span class="ep-form-label">编码</span>
+				<input name='charset' size='6' value='utf-8' class="span2" id='charset' />
+			</div>
+			<div class="ep-form-row">
+				<input type='button' onclick='antisql_add();' value='提交' class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+
+<table class="table table-bordered">
+    <thead>
+	<tr>
+		<th>操作</th>
+		<th>过滤参数值</th>
+		<th>编码</th>
+		<th>过滤方式</th>
+	</tr>
+	</thead>
+	<tbody>
+	{{foreach from=$sql item=row}}
+	<tr>
+		<td style="width:28px;"><a href="javascript:antisql_del({{$row.id}})">删除</a></td>
+		<td>{{$row.value}}</td>
+		<td>{{$row.charset}}</td>
+		<td>{{if $row.get==1}}get&nbsp;{{/if}}{{if $row.post==1}}post{{/if}}</td>
+	</tr>
+	{{/foreach}}
+	</tbody>
+</table>
+</div>
+
+<script>
+	form.param_value.focus();
+</script>
