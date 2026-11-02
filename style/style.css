@@ -985,6 +985,7 @@ button.btn-default {
 	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f87171' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M9 9l6 6M15 9l-6 6'/></svg>") center / 18px 18px no-repeat;
 }
 
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico0,
 .layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico3,
 .layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico7 {
 	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M12 7.5v5.5'/><circle cx='12' cy='16.5' r='.9' fill='%23fbbf24' stroke='none'/></svg>") center / 18px 18px no-repeat;
@@ -1006,6 +1007,43 @@ button.btn-default {
 	to {
 		transform: rotate(360deg);
 	}
+}
+
+/* 后台任务徽标：任务执行中显示的入口，点击重新打开进度窗口 */
+.ep-task-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 2px 10px;
+	border-radius: 999px;
+	background: #eef4ff;
+	color: var(--ep-primary);
+	font-size: 12px;
+	font-weight: 500;
+	vertical-align: middle;
+}
+
+.ep-task-chip:hover {
+	color: var(--ep-primary-dark);
+}
+
+.ep-task-chip.is-floating {
+	position: fixed;
+	left: 16px;
+	bottom: 16px;
+	z-index: 1200;
+	padding: 6px 14px;
+	background: #fff;
+	box-shadow: 0 8px 24px rgba(16, 24, 40, .18);
+}
+
+.ep-task-chip-spin {
+	width: 12px;
+	height: 12px;
+	border: 2px solid rgba(37, 99, 235, .3);
+	border-top-color: var(--ep-primary);
+	border-radius: 50%;
+	animation: epToastSpin .7s linear infinite;
 }
 
 .layui-layer .layui-layer-title {

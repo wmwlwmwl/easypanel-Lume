@@ -106,18 +106,40 @@ function editfrom(file) {
 			content: '<div class="ep-dialog-body">'
 				+ '<form name="wget" action="?c=shell&a=wget" method="post" data-shell-command="1">'
 				+ '<label>下载地址</label><input name="url" id="wgeturl">'
-				+ '<label>存放文件名</label><input name="filename">'
+				+ '<label>存放文件名</label><input name="filename" id="wgetfilename">'
 				+ '<label class="ep-inline-check"><input name="-c" type="checkbox" value="1"> 断点续传</label>'
 				+ '<input name="dir" id="wgetdir" type="hidden">'
 				+ '</form></div>',
 			btn: ['提交', '取消'],
-			yes: function () {
+			yes: function (idx) {
 				$('form[name=wget]').submit();
-				layer.close(index);
+				// shell.js 校验不通过时不会打开执行状态窗口，此时保留参数弹窗
+				if ($('.ep-shell-dialog:visible').length) layer.close(idx);
 			},
 			success: function () {
 				$('#wgetdir').val(cwd);
-				$('#wgeturl').focus();
+				var auto = false, $url = $('#wgeturl'), $name = $('#wgetfilename');
+				var fill = function () {
+					if ($.trim($name.val()) !== '' && !auto) return;
+					var raw = $.trim($url.val()), seg = '';
+					if (raw) {
+						try {
+							seg = new URL(raw).pathname;
+						} catch (e) {
+							// 没写协议时退化为手写解析
+							seg = raw.replace(/^[a-z]+:\/\/[^/]*/i, '').replace(/[?#].*$/, '');
+						}
+						seg = seg.replace(/\/+$/, '');
+						seg = seg.substring(seg.lastIndexOf('/') + 1);
+						try { seg = decodeURIComponent(seg); } catch (e) { }
+					}
+					$name.val(seg);
+					auto = seg !== '';
+				};
+				$url.on('input change', fill);
+				// 用户手动改过文件名后不再自动覆盖
+				$name.on('input', function () { auto = false; });
+				$url.focus();
 			}
 		});
 	}
