@@ -54,7 +54,7 @@ function epMeter(id, used, total) {
 
 jQuery(document).ready(function() {
 	if (msg != '') {
-		epDialog('提示', msg, {time: 3000, area: '360px'});
+		epDialog('提示', msg, {time: 3000, area: $(window).width() > 720 ? '360px' : '88%'});
 	}
 	var webmit = '{{$user.web_quota|escape:'javascript'}}';
 	var webused = '{{$quota.web_used|escape:'javascript'}}';

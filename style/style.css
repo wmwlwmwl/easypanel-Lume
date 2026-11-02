@@ -987,7 +987,10 @@ button.btn-default {
 }
 
 .ep-dialog-body {
-	padding: 18px 20px 4px;
+	padding: 18px 20px;
+	font-size: 13px;
+	line-height: 1.7;
+	color: var(--ep-text);
 }
 
 .ep-dialog-body label {
@@ -1016,6 +1019,37 @@ button.btn-default {
 .ep-dialog-body input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=hidden]):focus {
 	border-color: var(--ep-primary);
 	box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+
+.ep-dialog-body textarea {
+	box-sizing: border-box;
+	width: 100%;
+	min-height: 140px;
+	padding: 10px 12px;
+	border: 1px solid var(--ep-border);
+	border-radius: 8px;
+	color: var(--ep-text);
+	font: inherit;
+	font-size: 13px;
+	line-height: 1.6;
+	outline: none;
+	resize: vertical;
+}
+
+.ep-dialog-body textarea:focus {
+	border-color: var(--ep-primary);
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+
+.ep-dialog-body .ep-hint {
+	margin: 0 0 10px;
+}
+
+.ep-dialog-body .ep-dialog-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	padding: 4px 0 0;
 }
 
 .ep-dialog-body p {
@@ -1050,6 +1084,10 @@ button.btn-default {
 
 .ep-text-danger {
 	color: var(--ep-danger);
+}
+
+.ep-text-success {
+	color: #15803d;
 }
 
 /* 消息页 */

@@ -40,10 +40,10 @@ function domain_add()
 var dialog = null;
 function domain_import_dialog()
 {
-	var html = '<div>覆盖:<input id="replace" name="replace" type=checkbox value=1 checked></div>';
-		html += '<div class="piao_div">一行一个，域名和IP(或目录)用空格分割</div>';
-		html += '<div class="piao_div"><textarea id="domain_import_value" rows=10 cols=60 placeholder="www.cdn.com 192.168.1.2"></textarea></div>';
-		html += '<div><button type="button" class="btn btn-primary" onclick="domain_import()">导入</button></div>';
+	var html = '<label class="ep-inline-check"><input id="replace" name="replace" type="checkbox" value="1" checked> 覆盖已绑定域名</label>';
+		html += '<div class="ep-hint">一行一个，域名和 IP（或目录）用空格分割</div>';
+		html += '<textarea id="domain_import_value" rows="8" placeholder="www.cdn.com 192.168.1.2"></textarea>';
+		html += '<div class="ep-dialog-actions"><button type="button" class="btn btn-default" onclick="layer.close(dialog.index)">取消</button><button type="button" class="btn btn-primary" onclick="domain_import()">导入</button></div>';
 		var index = epDialog('批量添加域名绑定', html, {area: $(window).width() > 720 ? '520px' : '92%'});
 		dialog = { index: index };
 }
@@ -108,14 +108,14 @@ function domain_import()
 				addmsg += "<b";
 				if (a =='成功') {
 					last = ip;
-					addmsg += ' class="green">';
+					addmsg += ' class="ep-text-success">';
 				}else {
-					addmsg +=' class="red">';
+					addmsg +=' class="ep-text-danger">';
 				}
 				addmsg += domain + a + '</b><br>';
 			},
 			error:function() {
-				addmsg += '<b class="red">' + domain + '请求失败</b><br>';
+				addmsg += '<b class="ep-text-danger">' + domain + '请求失败</b><br>';
 			},
 			complete:next
 		});
