@@ -699,6 +699,24 @@ h4 {
 	border-top: 0;
 }
 
+/* 表格滚动容器：窄屏时宽表格在卡片内部横向滑动 */
+.ep-table-scroll {
+	max-width: 100%;
+	margin: 0 0 14px;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+.ep-table-scroll > .table {
+	margin-bottom: 0;
+}
+
+/* 证书信息表：桌面端固定标签列宽 */
+.ep-cert-table th {
+	width: 120px;
+	white-space: nowrap;
+}
+
 /* ── 按钮与表单控件 ───────────────────────── */
 input[type="text"],
 input[type="password"],
@@ -1203,16 +1221,58 @@ button.btn-default {
 
 	.main {
 		padding: 0 14px 14px;
-		overflow-x: auto;
 	}
 
 	.main > .public_pa {
 		margin: 0 -14px 14px;
 		padding: 12px 14px;
+		overflow-wrap: anywhere;
+	}
+
+	.table th,
+	.table td {
+		padding: 8px;
+		word-break: break-word;
+		overflow-wrap: anywhere;
 	}
 
 	.table-bordered {
+		min-width: 0;
+	}
+
+	.ep-table-scroll.is-wide > .table {
 		min-width: 520px;
+	}
+
+	.ep-cert-table th {
+		width: auto;
+		white-space: normal;
+	}
+
+	.ep-form-row {
+		align-items: flex-start;
+	}
+
+	.ep-form-label {
+		flex: 0 0 100%;
+	}
+
+	.ep-form-row > input:not([type]),
+	.ep-form-row > input[type="text"],
+	.ep-form-row > input[type="password"],
+	.ep-form-row > input[type="number"],
+	.ep-form-row > input[type="email"],
+	.ep-form-row > input[type="search"],
+	.ep-form-row > select,
+	.ep-form-row > textarea {
+		flex: 1 1 100%;
+		width: 100%;
+		min-width: 0;
+	}
+
+	.ep-form-row > input.wid_tpl {
+		flex: 0 1 110px;
+		width: 110px;
 	}
 
 	.ep-chart {

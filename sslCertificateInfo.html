@@ -1,10 +1,11 @@
 {{if $certificate_info}}
-<table class="table table-bordered" style="table-layout:fixed;">
+<div class="ep-table-scroll">
+<table class="table table-bordered ep-cert-table">
 	{{if $certificate_info.error}}
 	<tr><td class="ep-text-danger">{{$certificate_info.error|escape:'html'}}</td></tr>
 	{{else}}
 	<tr>
-		<th style="width:120px;">证书品牌</th>
+		<th>证书品牌</th>
 		<td style="word-wrap:break-word;">{{$certificate_info.brand|escape:'html'}}</td>
 	</tr>
 	<tr>
@@ -26,4 +27,5 @@
 	</tr>
 	{{/if}}
 </table>
+</div>
 {{/if}}

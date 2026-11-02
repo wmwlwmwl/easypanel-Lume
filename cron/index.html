@@ -1,6 +1,7 @@
 <div class="main">
 	<div class="public_pa">计划任务设置 [<a href='?c=cron&a=sync'>重建计划任务</a>]</div>
 	{{if $crons}}
+	<div class="ep-table-scroll">
 	<table class="table table-bordered">
 		<thead>
 			<tr>
@@ -20,6 +21,7 @@
 		</tr>
 		{{/foreach}}
 	</table>
+	</div>
 	{{else}}
 	<div class="ep-empty">暂无计划任务，请在下方添加</div>
 	{{/if}}

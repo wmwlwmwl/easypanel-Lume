@@ -34,6 +34,7 @@
 			</div>
 		</form>
 	</div>
+<div class="ep-table-scroll is-wide">
 	<table class="table table-bordered">
 	<thead>
 		<tr>
@@ -46,12 +47,13 @@
 	</thead>
 		{{foreach from=$header item=row}}
 		<tr>
-			<td style="width:60px;"><a href="javascript:cache_del({{$row.id}})">删除</a></td>
-			<td style="width:30px;">{{$row.id}}</td>
-			<td style="width:160px;">{{$row.name}}</td>
-			<td style="width:160px;">{{$row.max_age}} 秒 {{if $row.static}}强制缓存{{/if}}</td>
-			<td style="width:auto">{{$row.val}}</td>
+			<td><a href="javascript:cache_del({{$row.id}})">删除</a></td>
+			<td>{{$row.id}}</td>
+			<td>{{$row.name}}</td>
+			<td>{{$row.max_age}} 秒 {{if $row.static}}强制缓存{{/if}}</td>
+			<td>{{$row.val}}</td>
 		</tr>
 		{{/foreach}}
 	</table>
+	</div>
 </div>

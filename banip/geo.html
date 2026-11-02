@@ -11,6 +11,7 @@
             <button type="submit" id="bangeo-add" class="btn btn-primary" disabled>增加</button>
         </form>
     </div>
+    <div class="ep-table-scroll">
     <table class="table table-bordered">
         <thead><tr><th>操作 [<a href="javascript:;" id="bangeo-clear">清空</a>]</th><th>{{if $list_controller=='whitelist'}}允许地区{{else}}禁止地区{{/if}}</th></tr></thead>
         <tbody>
@@ -19,4 +20,5 @@
         {{/foreach}}
         </tbody>
     </table>
+    </div>
 </div>

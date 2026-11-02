@@ -12,7 +12,7 @@
 	}
 	function showRequest()
 	{
-		var s = '<table class="table table-bordered"><thead>';
+		var s = '<div class="ep-table-scroll is-wide"><table class="table table-bordered"><thead>';
 			s += '<tr >';
 			s += '	  <th ><a href=\'javascript:sortrq(1)\'>源地址</a></th>';
 			s += '	  <th ><a href=\'javascript:sortrq(2)\'>时间</a></th>';
@@ -36,7 +36,7 @@
 			}
 			s += '</tr>';
 		}
-		s += '</table>';
+		s += '</table></div>';
 		var box = byId('rq');
 		box.innerHTML = s;
 		jQuery(box).off('click.jsBanip').on('click.jsBanip', '.js-banip', function (e) {
