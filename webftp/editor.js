@@ -435,6 +435,7 @@ var aceEditor = {
         if (rdata.code == 200) {
           if (success) success(rdata)
         } else {
+          rdata.msg = editorSaveMessage(rdata.msg);
           if (error) error(rdata)
         }
         if (!obj.tips){
@@ -456,6 +457,14 @@ var aceEditor = {
     this.setStorage('aceConfig', JSON.stringify(data));
     if (callback) callback();
   }
+}
+
+// 无写权限时后端返回“不能打开文件:路径”，改为可读的只读提示
+function editorSaveMessage(msg) {
+  if (typeof msg === 'string' && msg.indexOf('不能打开文件') === 0) {
+    return '该文件为只读，无法保存';
+  }
+  return msg;
 }
 
 function openEditorView (path, callback) {
