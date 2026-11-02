@@ -943,6 +943,71 @@ button.btn-default {
 	box-shadow: 0 18px 50px rgba(16, 24, 40, .22) !important;
 }
 
+/* 轻提示：深色胶囊 + 线性图标，宽度随内容收缩
+   layer.js 运行时会再插入一次 layer.css，需靠选择器权重压过它，避免滥用 !important */
+.layui-layer.layui-layer-msg {
+	min-width: 0;
+	max-width: 80vw;
+	border: 0;
+	border-radius: 10px;
+	background: rgba(17, 24, 39, .92);
+	box-shadow: 0 10px 26px rgba(16, 24, 40, .28);
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content {
+	padding: 10px 16px;
+	color: #fff;
+	font-size: 13px;
+	line-height: 1.6;
+	text-align: center;
+	word-break: break-word;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-padding {
+	padding: 10px 18px 10px 44px;
+	text-align: left;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico {
+	top: 50%;
+	left: 14px;
+	width: 18px;
+	height: 18px;
+	margin-top: -9px;
+	background: none;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico1 {
+	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2334d399' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M8 12.5l2.5 2.5L16 9.5'/></svg>") center / 18px 18px no-repeat;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico2 {
+	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f87171' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M9 9l6 6M15 9l-6 6'/></svg>") center / 18px 18px no-repeat;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico3,
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico7 {
+	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fbbf24' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M12 7.5v5.5'/><circle cx='12' cy='16.5' r='.9' fill='%23fbbf24' stroke='none'/></svg>") center / 18px 18px no-repeat;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico5,
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico6 {
+	background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2393c5fd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='12' cy='12' r='9'/><path d='M12 11v5.5'/><circle cx='12' cy='7.5' r='.9' fill='%2393c5fd' stroke='none'/></svg>") center / 18px 18px no-repeat;
+}
+
+.layui-layer.layui-layer-msg .layui-layer-content .layui-layer-ico16 {
+	border: 2px solid rgba(255, 255, 255, .3);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: epToastSpin .7s linear infinite;
+}
+
+@keyframes epToastSpin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .layui-layer .layui-layer-title {
 	height: 46px;
 	line-height: 46px;
