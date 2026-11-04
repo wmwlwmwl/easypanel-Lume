@@ -13,10 +13,10 @@
 			</div>
 			{{include file='sslSwitch.html'}}
 			{{include file='sslCertFields.html'}}
-			{{if $ssl==1 && (!$ssl_rewrite || !$hsts || !$http2)}}
+			{{if $ssl==1 && (!$ssl_rewrite || !$hsts || !$http2 || ($support_http3 && !$http3))}}
 			<div class="ep-form-row">
 				<input type="button" class="btn btn-primary" value="一键开启 HTTPS 优化" onclick="ssl_quick_on();">
-				<span class="ep-hint">同时开启 HTTP跳转HTTPS、HSTS、HTTP2</span>
+				<span class="ep-hint">同时开启 HTTP跳转HTTPS、HSTS、HTTP2{{if $support_http3}}、HTTP3(QUIC){{/if}}</span>
 			</div>
 			{{/if}}
 			<div class="ep-form-row">
@@ -40,13 +40,15 @@ function ssl_quick_on()
 	var domain = {{if $ssl_domain}}$("#domain").val(){{else}}''{{/if}};
 	var query = domain ? '&domain=' + encodeURIComponent(domain) : '';
 	var steps = [];
-	{{if !$ssl_rewrite}}steps.push({url: '?c=ssl&a={{$sslRewriteAction}}', data: 'status=1' + query});{{/if}}
-	{{if !$hsts}}steps.push({url: '?c=ssl&a=hsts', data: 'status=1' + query});{{/if}}
-	{{if !$http2}}steps.push({url: '?c=ssl&a=http2', data: 'status=1'});{{/if}}
+	{{if !$ssl_rewrite}}steps.push({url: '?c=ssl&a={{$sslRewriteAction}}', data: 'status=1' + query, name: 'HTTP跳转HTTPS'});{{/if}}
+	{{if !$hsts}}steps.push({url: '?c=ssl&a=hsts', data: 'status=1' + query, name: 'HSTS'});{{/if}}
+	{{if !$http2}}steps.push({url: '?c=ssl&a=http2', data: 'status=1', name: 'HTTP2'});{{/if}}
+	{{if $support_http3 && !$http3}}steps.push({url: '?c=ssl&a=http3', data: 'status=1', name: 'HTTP3(QUIC)'});{{/if}}
 	if (!steps.length) {
-		return alert('HTTP跳转HTTPS、HSTS、HTTP2 均已开启');
+		return alert('HTTP跳转HTTPS、HSTS、HTTP2{{if $support_http3}}、HTTP3(QUIC){{/if}} 均已开启');
 	}
-	if (!confirm('将同时开启 HTTP跳转HTTPS、HSTS、HTTP2，是否继续？')) {
+	var names = $.map(steps, function (step) { return step.name; });
+	if (!confirm('将同时开启 ' + names.join('、') + '，是否继续？')) {
 		return;
 	}
 	var run = function (i) {
