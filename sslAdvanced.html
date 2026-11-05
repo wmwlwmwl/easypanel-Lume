@@ -15,11 +15,13 @@
 <div class="ep-form-row">
 	<span class="ep-form-label">HTTP2</span>
 	{{include file='common/switch.html' is_on=$http2 on_url='javascript:http2_checkon(1)' off_url='javascript:http2_checkon(0)'}}
+	<span class="ep-hint">所有域名公用</span>
 </div>
 {{/if}}
 {{if $support_http3&&$ssl==1}}
 <div class="ep-form-row">
 	<span class="ep-form-label">HTTP3(QUIC)</span>
 	{{include file='common/switch.html' is_on=$http3 on_url='javascript:http3_checkon(1)' off_url='javascript:http3_checkon(0)'}}
+	<span class="ep-hint">所有域名公用</span>
 </div>
 {{/if}}
