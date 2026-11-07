@@ -1,4 +1,4 @@
-<script src='{{$STATIC}}js/domain.js?v=11'></script>
+<script src='{{$STATIC}}js/domain.js?v=20'></script>
 
 <div class="main">
 	<div class="public_pa">域名绑定</div>
@@ -40,10 +40,27 @@
 				<span class="ep-hint ep-text-danger" id="domain_edit_tip" style="display:none">编辑时域名不可修改，如需变更请先删除该域名再重新绑定</span>
 			</div>
 			{{if $subdir_flag}}
+			{{if $user.cdn}}
 			<div class="ep-form-row">
-				<span class="ep-form-label">{{if $user.cdn}}源站IP{{else}}目录{{/if}}</span>
+				<span class="ep-form-label">源站IP</span>
 				<input type='text' name='subdir' id='subdir' value="{{$default_subdir}}" size='40' />
 			</div>
+			{{else}}
+			<div class="ep-form-row">
+				<span class="ep-form-label">目录</span>
+				<span class="ep-combo">
+					<input type='text' name='subdir_base' id='subdir_base' value="{{$default_subdir|escape:'html'}}" placeholder="一级目录，留空为根目录" />
+					<span class="ep-combo-arrow" aria-hidden="true"></span>
+					<datalist id="subdir_base_list"></datalist>
+				</span>
+				<span class="ep-subdir-sep">/</span>
+				<span class="ep-combo">
+					<input type='text' name='subdir_second' id='subdir_second' value="" size='24' placeholder="二级目录，留空则直接使用一级目录" />
+					<span class="ep-combo-arrow" aria-hidden="true"></span>
+					<datalist id="subdir_second_list"></datalist>
+				</span>
+			</div>
+			{{/if}}
 			{{if $user.cdn}}
 			<div class="ep-form-row">
 				<span class="ep-form-label">回源协议</span>
