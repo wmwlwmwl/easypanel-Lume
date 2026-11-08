@@ -1,23 +1,29 @@
 <div class="main">
-	<div class="public_pa">计划任务设置 [<a href='?c=cron&a=sync'>重建计划任务</a>]</div>
+	<div class="public_pa">计划任务设置 [<a href='?c=cron&a=sync'>重建计划任务</a>] [<a href="?c=index&a=webftp&dir=/logs" title="执行结果记录在 logs/cron.log">查看执行日志</a>]</div>
+	{{if $msg}}
+	<div class="ep-notice">{{if $err}}<span class="ep-text-danger">{{$msg|escape:'html'}}</span>{{else}}{{$msg|escape:'html'}}{{/if}}</div>
+	{{/if}}
+	{{if $user.cron > 0}}
+	<div class="ep-hint">已添加 {{$count}} 个任务，最多可添加 {{$user.cron}} 个</div>
+	{{/if}}
 	{{if $crons}}
 	<div class="ep-table-scroll">
 	<table class="table table-bordered">
 		<thead>
 			<tr>
 				<th>操作</th>
-				<th>时间</th>
+				<th>执行周期</th>
 				<th>网址</th>
 			</tr>
 		</thead>
 		{{foreach from=$crons item=cron}}
 		<tr>
-			<td>[<a href='?c=cron&a=del&id={{$cron.id}}'>删除</a>]</td>
-			<td class="ep-cron-cell" data-cron="{{$cron.min}} {{$cron.hour}} {{$cron.day}} {{$cron.month}} {{$cron.mday}}">
-				<span class="ep-cron-desc">{{$cron.min}} {{$cron.hour}} {{$cron.day}} {{$cron.month}} {{$cron.mday}}</span>
-				<span class="ep-hint ep-cron-raw"></span>
+			<td>[<a href="javascript:cron_del('{{$cron.id|escape:'javascript'}}', '{{$cron.expr|escape:'javascript'}}', '{{$cron.cmd|escape:'javascript'}}')">删除</a>]</td>
+			<td class="ep-cron-cell">
+				<span class="ep-cron-desc">{{$cron.desc|escape:'html'}}</span>
+				<span class="ep-hint ep-cron-raw">{{$cron.min}} {{$cron.hour}} {{$cron.day}} {{$cron.month}} {{$cron.mday}}</span>
 			</td>
-			<td>{{$cron.cmd}}</td>
+			<td>{{$cron.cmd|escape:'html'}}</td>
 		</tr>
 		{{/foreach}}
 	</table>
@@ -26,6 +32,9 @@
 	<div class="ep-empty">暂无计划任务，请在下方添加</div>
 	{{/if}}
 	<div class="ep-form-body">
+	{{if $user.cron > 0 && $count >= $user.cron}}
+		<div class="ep-hint">已达到计划任务数量上限，请先删除不需要的任务。</div>
+	{{else}}
 		<form action='?c=cron&a=add' method='post' onsubmit="return check_cron();">
 			<div class="ep-form-row">
 				<span class="ep-form-title">添加任务</span>
@@ -60,18 +69,20 @@
 			</div>
 			<div class="ep-form-row">
 				<span class="ep-form-label">网址</span>
-				<input name='cmd' class="span5" placeholder="要执行的网址或命令" />
+				<input name='cmd' id='cron_cmd' size='40' maxlength='2000' placeholder="https://www.example.com/cron.php" />
 			</div>
 			<div class="ep-form-row">
 				<input type="hidden" name="t" id="cron_value" value="* * * * *" />
 				<input type='submit' value='增加' class="btn btn-primary" />
 			</div>
 		</form>
+	{{/if}}
 	</div>
 </div>
 <script>
 (function(){
 	var sel=document.getElementById('period_type');
+	if(!sel){ return; }
 	var hidden=document.getElementById('cron_value');
 	var preview=document.getElementById('cron_preview');
 	var nMinRow=document.getElementById('n_min_row');
@@ -111,50 +122,26 @@
 	custom.addEventListener('input',sync);
 	sync();
 })();
-function epPad(n){ n=String(n); return n.length<2?'0'+n:n; }
-function epDescribeCron(raw){
-	var p=raw.split(' ');
-	if(p.length!==5) return '自定义';
-	var m=p[0],h=p[1],d=p[2],mo=p[3],w=p[4];
-	if(m==='*'&&h==='*'&&d==='*'&&mo==='*'&&w==='*') return '每分钟';
-	if(/^\*\/[0-9]+$/.test(m)&&h==='*'&&d==='*'&&mo==='*'&&w==='*') return '每 '+m.slice(2)+' 分钟';
-	if(m!=='*'&&/^\*\/[0-9]+$/.test(h)&&d==='*'&&mo==='*'&&w==='*') return '每 '+h.slice(2)+' 小时';
-	if(m!=='*'&&h==='*'&&d==='*'&&mo==='*'&&w==='*') return '每小时第 '+m+' 分';
-	if(m!=='*'&&h!=='*'&&d==='*'&&mo==='*'&&w!=='*'){
-		var wn=['日','一','二','三','四','五','六'][parseInt(w,10)];
-		return '每周'+(wn||w)+' '+h+':'+epPad(m);
-	}
-	if(m!=='*'&&h!=='*'&&d==='*'&&mo==='*'&&w==='*') return '每天 '+h+':'+epPad(m);
-	if(m!=='*'&&h!=='*'&&d!=='*'&&mo==='*'&&w==='*') return '每月 '+d+' 日 '+h+':'+epPad(m);
-	if(m!=='*'&&h!=='*'&&d!=='*'&&mo!=='*'&&w==='*') return '每年 '+mo+' 月 '+d+' 日 '+h+':'+epPad(m);
-	return '自定义';
+function cron_del(id, expr, cmd){
+	if(!confirm('确定删除这个计划任务？\n执行周期：'+(expr||'-')+'\n目标网址：'+(cmd||'-'))){ return; }
+	window.location='?c=cron&a=del&id='+encodeURIComponent(id);
 }
-(function(){
-	var cells=document.querySelectorAll('.ep-cron-cell');
-	for(var i=0;i<cells.length;i++){
-		var raw=(cells[i].getAttribute('data-cron')||'').replace(/^\s+/,'').replace(/\s+/g,' ');
-		var desc=cells[i].querySelector('.ep-cron-desc');
-		var rawEl=cells[i].querySelector('.ep-cron-raw');
-		if(desc && raw){ desc.textContent=epDescribeCron(raw); }
-		if(rawEl){ rawEl.textContent=raw; }
-	}
-})();
 function check_cron(){
-	var t=document.getElementById('period_type').value;
-	if(t==='custom'){
-		var v=document.getElementById('cron_value').value;
-		if(v===''){
-			alert('请填写自定义表达式');
-			document.getElementById('cron_custom').focus();
-			return false;
-		}
-		var parts=v.split(/\s+/).filter(function(x){return x!=='';});
-		if(parts.length!==5){
-			alert('表达式格式不正确：应为 5 个字段（分 时 日 月 周），用空格分隔，例如：* * * * *');
-			document.getElementById('cron_custom').focus();
-			return false;
-		}
+	var v=document.getElementById('cron_value').value.replace(/^\s+|\s+$/g,'');
+	// 与后端校验保持一致：5 段 crontab 表达式
+	if(!/^[0-9*\/,\-]+( [0-9*\/,\-]+){4}$/.test(v)){
+		alert('执行周期必须是 5 段表达式（分 时 日 月 周），例如 */5 * * * *');
+		return false;
 	}
+	var cmd=document.getElementById('cron_cmd');
+	var c=cmd.value.replace(/^\s+|\s+$/g,'');
+	// 与后端校验保持一致：必须 http(s)，不能含空格或引号
+	if(!/^https?:\/\/[^\s'"<>`]+$/i.test(c)){
+		alert('网址必须以 http:// 或 https:// 开头，且不能包含空格或引号');
+		cmd.focus();
+		return false;
+	}
+	cmd.value=c;
 	return true;
 }
 </script>
