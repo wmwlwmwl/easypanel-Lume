@@ -26,7 +26,7 @@
 		</form>
 	</div>
 </div>
-<script src="{{$STATIC}}js/ssl.js?v=6"></script>
+<script src="{{$STATIC}}js/ssl.js?v=7"></script>
 <script>
 function ssl_checkon(val)
 {
@@ -45,30 +45,26 @@ function ssl_quick_on()
 	{{if !$http2}}steps.push({url: '?c=ssl&a=http2', data: 'status=1', name: 'HTTP2'});{{/if}}
 	{{if $support_http3 && !$http3}}steps.push({url: '?c=ssl&a=http3', data: 'status=1', name: 'HTTP3(QUIC)'});{{/if}}
 	if (!steps.length) {
-		return alert('HTTP跳转HTTPS、HSTS、HTTP2{{if $support_http3}}、HTTP3(QUIC){{/if}} 均已开启');
+		return ep_alert('HTTP跳转HTTPS、HSTS、HTTP2{{if $support_http3}}、HTTP3(QUIC){{/if}} 均已开启');
 	}
 	var names = $.map(steps, function (step) { return step.name; });
-	if (!confirm('将同时开启 ' + names.join('、') + '，是否继续？')) {
-		return;
-	}
-	var run = function (i) {
-		if (i >= steps.length) {
-			alert('HTTPS 优化已开启');
-			window.location.reload();
-			return;
-		}
-		$.post(steps[i].url, steps[i].data, function (msg) {
-			if ($.trim(msg) !== '成功') {
-				alert(msg);
-				window.location.reload();
+	ep_confirm('将同时开启 ' + names.join('、') + '，是否继续？', function () {
+		var run = function (i) {
+			if (i >= steps.length) {
+				ep_alert('HTTPS 优化已开启', function () { window.location.reload(); }, 1);
 				return;
 			}
-			run(i + 1);
-		}, 'text').fail(function () {
-			alert('请求失败，请稍后重试');
-			window.location.reload();
-		});
-	};
-	run(0);
+			$.post(steps[i].url, steps[i].data, function (msg) {
+				if ($.trim(msg) !== '成功') {
+					ep_alert(msg, function () { window.location.reload(); });
+					return;
+				}
+				run(i + 1);
+			}, 'text').fail(function () {
+				ep_alert('请求失败，请稍后重试', function () { window.location.reload(); }, 2);
+			});
+		};
+		run(0);
+	});
 }
 </script>

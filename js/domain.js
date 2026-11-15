@@ -262,13 +262,13 @@ function domain_add()
 	var subdir = domain_subdir_value();
 	var proto = $("#proto").val();
 	if(domain == ''){
-		return alert('域名不能为空');
+		return ep_alert('域名不能为空');
 	}
 	if(is_cname_domain(domain)){
-		return alert('该域名为CNAME接入域名,不能绑定');
+		return ep_alert('该域名为CNAME接入域名,不能绑定');
 	}
 	if($("#proto").length>0 && subdir==''){
-		return alert('源站IP不能为空');
+		return ep_alert('源站IP不能为空');
 	}
 	ep_ajax('?c=domain&a=add', {domain:domain, subdir:subdir, proto:proto, replace:replace}, {reload:'always'});
 }
@@ -359,10 +359,9 @@ function domain_import()
 }
 function domain_del(val)
 {
-	if (!confirm("确定要删除?")) {
-		return;
-	}
-	ep_ajax('?c=domain&a=del', {domain:val}, {reload:'always'});
+	ep_confirm("确定要删除?", function () {
+		ep_ajax('?c=domain&a=del', {domain:val}, {reload:'always'});
+	});
 }
 function domain_edit(val)
 {
@@ -381,7 +380,7 @@ function domain_edit(val)
 				$("#button_cancel").show();
 				replace = 1;
 			}else{
-				return alert(data.msg);
+				return ep_alert(data.msg);
 			}
 		}
 	});
@@ -411,7 +410,7 @@ function domain_note_value()
 function copy_domain_note()
 {
 	var val = domain_note_value();
-	if (val == '') return alert('暂无可复制内容');
+	if (val == '') return ep_alert('暂无可复制内容');
 	var done = function(){
 		var b = $("#domain_note_copy");
 		var o = b.text();
@@ -437,7 +436,7 @@ function fallback_copy(text, done)
 	try { ok = document.execCommand('copy'); } catch(e) { ok = false; }
 	document.body.removeChild(ta);
 	if (ok) done();
-	else alert('复制失败，请手动复制：' + text);
+	else ep_alert('复制失败，请手动复制：' + text);
 }
 
 var subdir_base_default = null;

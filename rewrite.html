@@ -41,7 +41,7 @@ function edit_rewrite()
 	var id = $("#dir").val();
 	var content = $("#content").val();
 	if(id == ''){
-		return alert('请选择网站目录');
+		return ep_alert('请选择网站目录');
 	}
 	ep_ajax('?c=rewrites&a=edit', {id:id, content:content}, {successMessage:'保存成功！', errorText:'数据加载失败', sync:false});
 }
@@ -49,12 +49,11 @@ function del_rewrite()
 {
 	var id = $("#dir").val();
 	if(id == ''){
-		return alert('请选择网站目录');
+		return ep_alert('请选择网站目录');
 	}
-	if (!confirm("确定删除伪静态规则吗?")) {
-		return;
-	}
-	ep_ajax('?c=rewrites&a=del', {id:id}, {errorText:'数据加载失败', sync:false});
+	ep_confirm("确定删除伪静态规则吗?", function () {
+		ep_ajax('?c=rewrites&a=del', {id:id}, {errorText:'数据加载失败', sync:false});
+	});
 }
 $(document).ready(function(){
 	var currentContent = $("#content").val();
@@ -79,7 +78,7 @@ $(document).ready(function(){
 				}
 			},
 			error: function(){
-				alert('数据加载失败');
+				ep_alert('数据加载失败');
 			}
 		});
 	});

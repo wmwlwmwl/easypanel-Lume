@@ -12,6 +12,11 @@
 	}
 	function showRequest()
 	{
+		var box = byId('rq');
+		if (!rqs.length) {
+			box.innerHTML = '<div class="ep-empty">当前没有连接</div>';
+			return;
+		}
 		var s = '<div class="ep-table-scroll is-wide"><table class="table table-bordered"><thead>';
 			s += '<tr >';
 			s += '	  <th ><a href=\'javascript:sortrq(1)\'>源地址</a></th>';

@@ -2,11 +2,11 @@ function mime_add()
 {
 	var file_ext = $("#file_ext").val();
 	if (file_ext == "") {
-		return alert("文件扩展名不能为空");
+		return ep_alert("文件扩展名不能为空");
 	}
 	var mime_type = $("#mime_type").val();
 	if (mime_type == "") {
-		return alert("mime类型不能为空");
+		return ep_alert("mime类型不能为空");
 	}
 	var cache_time = $("#cache_time").val();
 	var gzip = 0;

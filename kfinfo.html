@@ -29,9 +29,9 @@
 var msg = '{{$msg|escape:'javascript'}}';
 
 function rebootProcess() {
-	if (confirm("确定要重启吗？这将对你现在运行中的网站中断请求！")) {
+	ep_confirm("确定要重启吗？这将对你现在运行中的网站中断请求！", function () {
 		ep_ajax("?c=index&a=rebootProcess", null, {type: "get", raw: true, reload: false, sync: false});
-	}
+	});
 }
 
 function refreshDbUsed() {

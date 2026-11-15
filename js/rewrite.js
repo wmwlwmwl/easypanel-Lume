@@ -4,10 +4,10 @@ function rewrite_add()
 	var dst = $("#dst").val();
 	var host = $("#host").val();
 	if (host == "") {
-		return alert("域名不能为空");
+		return ep_alert("域名不能为空");
 	}
 	if (dst == "") {
-		return alert("跳转域名不能为空");
+		return ep_alert("跳转域名不能为空");
 	}
 	if (code == "") {
 		code = 301;

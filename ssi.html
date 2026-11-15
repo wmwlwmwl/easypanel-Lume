@@ -1,9 +1,8 @@
 <script>
 	function ssi_del(name) {
-		if (confirm("确认删除吗？") == false) {
-			return;
-		}
-		window.location = "?c=ssi&a=del&name=" + name;
+		ep_confirm("确认删除吗？", function () {
+			window.location = "?c=ssi&a=del&name=" + name;
+		});
 	}
 </script>
 <div class="main">

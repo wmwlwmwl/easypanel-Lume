@@ -13,7 +13,7 @@ function antiupload_add()
 {
 	var filename = $("#filename").val();
 	if (filename == "") {
-		return alert("文件后缀不能为空");
+		return ep_alert("文件后缀不能为空");
 	}
 	ep_ajax('?c=antiupload&a=antiuploadAdd', 'filename=' + filename);
 }

@@ -11,7 +11,7 @@
 		</thead>
 		{{foreach from=$list item=row}}
 		<tr>
-			<td>[<a href="javascript:if(confirm('确定删除{{$row.name}}？')){location='?c=info&a=delErrorPage&name={{$row.name}}';}" title="删除域名">删除</a>]</td>
+			<td>[<a href="javascript:errorpage_del('{{$row.name|escape:'javascript'}}')" title="删除域名">删除</a>]</td>
 			<td>{{$row.name}}</td>
 			<td>{{$row.value}}</td>
 		</tr>
@@ -31,3 +31,10 @@
 			{{include file='info/errorPageForm.html'}}
 		</div>
 </div>
+<script>
+function errorpage_del(name) {
+	ep_confirm('确定删除' + name + '？', function () {
+		location = '?c=info&a=delErrorPage&name=' + encodeURIComponent(name);
+	});
+}
+</script>

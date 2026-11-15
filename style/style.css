@@ -640,6 +640,56 @@ h4 {
 	color: var(--ep-primary-dark);
 }
 
+/* 页头标题右侧的操作按钮 */
+.public_pa > .ep-head-tools {
+	float: right;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin-top: -3px;
+	font-weight: 500;
+}
+
+.btn-sm,
+a.btn-sm,
+input.btn-sm {
+	height: 28px;
+	padding: 0 12px;
+	border-radius: 8px;
+	font-size: 12px;
+}
+
+/* 计划任务 */
+.ep-cron-desc {
+	display: block;
+	font-weight: 500;
+}
+
+.ep-cron-raw {
+	display: block;
+	margin-top: 2px;
+	font-family: Consolas, Menlo, monospace;
+	font-size: 12px;
+}
+
+.ep-cron-url {
+	word-break: break-all;
+}
+
+.ep-cron-preview code {
+	margin-right: 8px;
+	padding: 2px 8px;
+	border-radius: 6px;
+	background: #f1f5fb;
+	color: var(--ep-primary);
+	font-family: Consolas, Menlo, monospace;
+	font-size: 12px;
+}
+
+.ep-cron-preview .ep-hint {
+	margin-left: 0;
+}
+
 .wid_tpl {
 	width: 110px;
 }

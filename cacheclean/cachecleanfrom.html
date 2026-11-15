@@ -2,7 +2,7 @@
 	function cache_clean() {
 		var url = $("#url").val();
 		if (url == "") {
-			return alert('值不能为空');
+			return ep_alert('值不能为空');
 		}
 		var url_arr = url.split("\n");
 		var clean_url = "";
@@ -12,7 +12,7 @@
 				continue;
 			}
 			if (url_arr[i].substr(0, 7) != 'http://' && url_arr[i].substr(0, 8) != 'https://') {
-				return alert("输入错误，请检查每个url前面必需有http://");
+				return ep_alert("输入错误，请检查每个url前面必需有http://");
 			}
 			if (url_arr[i].slice(-1) == '*') {
 				url_arr[i] = '3' + url_arr[i].slice(0, -1);
@@ -20,14 +20,14 @@
 			clean_url += url_arr[i] + ', ';
 		}
 		if (clean_url == "") {
-			return alert('值不能为空');
+			return ep_alert('值不能为空');
 		}
 		ep_ajax('?c=cacheclean&a=cacheclean', {url: clean_url}, {raw: true, reload: false, sync: false});
 	}
 	function domain_cache_clean() {
 		var domain = $("#domain").val();
 		if (domain == "") {
-			return alert('请先选择一个域名');
+			return ep_alert('请先选择一个域名');
 		}
 		ep_ajax('?c=cacheclean&a=cacheclean', {url: '3http://' + domain + '/, 3https://' + domain + '/, '}, {raw: true, reload: false, sync: false});
 	}

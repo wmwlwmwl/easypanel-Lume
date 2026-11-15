@@ -13,7 +13,7 @@ function antisql_add()
 {
 	var param = $("#param").val();
 	if (param == "") {
-		return alert("参数值不能为空");
+		return ep_alert("参数值不能为空");
 	}
 	var charset = $("#charset").val();
 	ep_ajax('?c=antisql&a=antisqlAdd', {param_value: param, charset: charset});

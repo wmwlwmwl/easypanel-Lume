@@ -6,7 +6,7 @@ function protection_add()
 	var fileExt = $("#file_ext").val();
 	var allowEmpty = $("#allow_empty").is(':checked') ? '1' : '0';
 	if (path == "") {
-		return alert("保护路径不能为空");
+		return ep_alert("保护路径不能为空");
 	}
 	ep_ajax('?c=protection&a=addPath', {path: path, referer: referer, redirect: redirect, file_ext: fileExt, allow_empty: allowEmpty});
 }

@@ -1,4 +1,4 @@
-<script src='{{$STATIC}}js/domain.js?v=20'></script>
+<script src='{{$STATIC}}js/domain.js?v=21'></script>
 
 <div class="main">
 	<div class="public_pa">域名绑定</div>
@@ -64,7 +64,7 @@
 			{{if $user.cdn}}
 			<div class="ep-form-row">
 				<span class="ep-form-label">回源协议</span>
-				<select name="proto" id="proto" onchange="if(this.value=='https'||this.value=='follow')alert('选择此项必须先在源站配置好SSL证书')">
+				<select name="proto" id="proto" onchange="if(this.value=='https'||this.value=='follow')ep_alert('选择此项必须先在源站配置好SSL证书')">
 					<option value="http">http</option>
 					<option value="https">https</option>
 					<option value="follow">协议跟随</option>

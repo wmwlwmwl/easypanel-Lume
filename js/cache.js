@@ -10,10 +10,10 @@ function cache_add()
 	var cache_value = $("#cache_value").val();
 	var max_age = $("#max_age").val();
 	if (max_age == "") {
-		return alert("缓存时间不能为空");
+		return ep_alert("缓存时间不能为空");
 	}
 	if (cache_value == "") {
-		return alert("值不能为空");
+		return ep_alert("值不能为空");
 	}
 	var s = $("#static").is(':checked');
 	if (!s) {

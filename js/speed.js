@@ -20,17 +20,17 @@ function speed_add()
 	var max = $.trim($("#per_ip_max").val());
 	if (mode === 'per_ip') {
 		if (!/^[0-9]+$/.test(max) || Number(max) < 1 || Number(max) > 2147483647) {
-			return alert("单IP并发数必须是1到2147483647之间的整数");
+			return ep_alert("单IP并发数必须是1到2147483647之间的整数");
 		}
 	} else if ($.trim(limit) === "") {
-		return alert("带宽值不能为空");
+		return ep_alert("带宽值不能为空");
 	}
 	var path = $("#path").val();
 	if (path == document.getElementById("path").defaultValue) {
 		path = "";
 	}
 	if (mode == 'gspeed_limit' && path == "") {
-		return alert("该模式目录不能为空!");
+		return ep_alert("该模式目录不能为空!");
 	}
 	var data = {mode: mode, path: path};
 	if (mode === 'per_ip') {
@@ -96,7 +96,7 @@ $(document).ready(function(){
 	var limit = document.getElementById("limit");
 	limit.onblur = function(){
 		if (isNaN(limit.value)) {
-			alert("输入错误，输入值必需是数字");
+			ep_alert("输入错误，输入值必需是数字");
 		}
 	};
 });

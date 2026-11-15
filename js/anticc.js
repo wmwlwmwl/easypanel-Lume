@@ -11,11 +11,11 @@ function anticc_add()
 	if(frequency == 'diy' || frequency == ''){
 		var request = $("#request").val();
 		if (request == "") {
-			return alert('请求次数不能为空');
+			return ep_alert('请求次数不能为空');
 		}
 		var second = $("#second").val();
 		if (second == "") {
-			return alert("单位时间不能为空");
+			return ep_alert("单位时间不能为空");
 		}
 	}else{
 		var request = frequency.split(',')[0];

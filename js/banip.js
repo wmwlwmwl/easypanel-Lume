@@ -7,7 +7,7 @@ function banip_add()
 {
 	var ip = $("#ip").val();
 	if (ip == ""){
-		return alert("IP不能为空");
+		return ep_alert("IP不能为空");
 	}
 	ep_ajax('?c=' + banip_ctrl() + '&a=addBanip', 'ip=' + encodeURIComponent(ip));
 }
@@ -17,7 +17,7 @@ function banurl_add()
 	var url = $.trim($("#url").val());
 	var meth = $("#meth").val();
 	if (url === "" && meth === ""){
-		return alert("URL和请求方法不能同时为空");
+		return ep_alert("URL和请求方法不能同时为空");
 	}
 	ep_ajax('?c=' + banip_ctrl() + '&a=addBanurl', 'url=' + encodeURIComponent(url) + '&meth=' + encodeURIComponent(meth));
 }

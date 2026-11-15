@@ -1,10 +1,11 @@
 <div class="main">
-    <div class="public_pa">FTP设置</div>
+    <div class="public_pa">FTP设置
+		<span class="ep-head-tools">
+			<a class="btn btn-default btn-sm" href="ftp://{{$user.name}}@{{gethostbyname($smarty.server.SERVER_NAME)}}" target='_blank'>在线FTP</a>
+		</span>
+	</div>
 		<div class="ep-form-body">
 		<form action='?c=index&a=ftp' method='post'>
-			<div class="ep-form-row">
-				<span class="ep-form-title">[<a href="ftp://{{$user.name}}@{{gethostbyname($smarty.server.SERVER_NAME)}}" target='_blank'>在线FTP</a>]</span>
-			</div>
 			<div class="ep-form-row">
 				<span class="ep-form-label">FTP开关</span>
 				<label><input name='ftp' type='radio' value='1' {{if $user.ftp==1}}checked{{/if}} />启用</label>

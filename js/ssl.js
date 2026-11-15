@@ -3,12 +3,11 @@ function ssl_disable(form, scope)
 	var message = scope === 'domain'
 		? '确定关闭该域名的独立SSL证书？'
 		: '确定关闭当前账号的默认SSL证书？';
-	if (!window.confirm(message)) {
-		return false;
-	}
-	form.elements['certificate'].value = '';
-	form.elements['certificate_key'].value = '';
-	form.submit();
+	ep_confirm(message, function () {
+		form.elements['certificate'].value = '';
+		form.elements['certificate_key'].value = '';
+		form.submit();
+	});
 	return false;
 }
 
@@ -26,14 +25,22 @@ function ssl_switch_dirty()
 function ssl_switch_go()
 {
 	var select = document.getElementById('ssl_switch');
-	if (ssl_switch_dirty() && !window.confirm('有未提交的证书内容，切换将丢失，是否继续？')) {
-		if (select) select.value = ssl_switch_prev;
+	var domain = select ? select.value : '';
+	var go = function () {
+		location.href = domain
+			? '?c=ssl&a=domainSslForm&domain=' + encodeURIComponent(domain)
+			: '?c=ssl&a=sslForm';
+	};
+	if (ssl_switch_dirty()) {
+		ep_confirm('有未提交的证书内容，切换将丢失，是否继续？', go, {
+			okText: '继续切换',
+			cancel: function () {
+				if (select) select.value = ssl_switch_prev;
+			}
+		});
 		return;
 	}
-	var domain = select ? select.value : '';
-	location.href = domain
-		? '?c=ssl&a=domainSslForm&domain=' + encodeURIComponent(domain)
-		: '?c=ssl&a=sslForm';
+	go();
 }
 
 (function () {

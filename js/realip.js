@@ -12,7 +12,7 @@ function realip_save(form)
     if (header === '__custom__') {
         header = $.trim(form.elements.custom_header.value);
         if (!/^[!#$%&'*+.^_`|~0-9A-Za-z-]+$/.test(header)) {
-            alert('请输入有效的Header名称，不要包含冒号、空格或换行');
+            ep_alert('请输入有效的Header名称，不要包含冒号、空格或换行');
             form.elements.custom_header.focus();
             return false;
         }
@@ -25,12 +25,12 @@ function realip_save(form)
         data: {status: header === '' ? '0' : '1', header: header},
         success: function (message) {
             if (message !== '成功') {
-                alert(message);
+                ep_alert(message);
                 return;
             }
             window.location.reload();
         },
-        error: function () { alert('保存设置失败，请重试'); },
+        error: function () { ep_alert('保存设置失败，请重试'); },
         complete: function () { button.disabled = false; }
     });
     return false;

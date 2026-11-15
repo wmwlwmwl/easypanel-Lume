@@ -3,10 +3,9 @@
 		ep_ajax("?c=response&a=addGzip", {gzip: $("#gzip").val()}, {type: "get", raw: true, reload: false, sync: false});
 	}
 	function del() {
-		if (!confirm("确认删除该项设置？")) {
-			return;
-		}
-		ep_ajax("?c=response&a=delGzip", null, {type: "get", raw: true, reload: false, sync: false});
+		ep_confirm("确认删除该项设置？", function () {
+			ep_ajax("?c=response&a=delGzip", null, {type: "get", raw: true, reload: false, sync: false});
+		});
 	}
 </script>
 

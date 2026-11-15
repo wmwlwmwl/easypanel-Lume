@@ -96,7 +96,8 @@ function edit_submit(){
 }
 function reset_ini()
 {
-	if (!confirm("确定重置PHP环境设置吗?"))return;
-	ep_ajax('?c=phpset&a=reset', null, {type:'get', sync:false});
+	ep_confirm("确定重置PHP环境设置吗?", function () {
+		ep_ajax('?c=phpset&a=reset', null, {type:'get', sync:false});
+	});
 }
 </script>
