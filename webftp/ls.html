@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{$PSTATIC}}/style/shell.css?v=2">
 <script src="{{$PSTATIC}}/style/shell.js?v=6"></script>
-<link rel="stylesheet" href="{{$STATIC}}webftp/style.css?v=14">
+<link rel="stylesheet" href="{{$STATIC}}webftp/style.css?v=26">
 <script src="{{$STATIC}}webftp/editor.js?v=7"></script>
 <script src="{{$STATIC}}webftp/upload-drog.js?v=5"></script>
 <script type='text/javascript'>
@@ -24,124 +24,195 @@ var cwd = '{{$cwd|escape:'javascript'}}';
 	<symbol id="wf-zip" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="4" rx="1"></rect><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8"></path><path d="M10 12h4"></path></symbol>
 	<symbol id="wf-exe" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="m8 9 3 3-3 3M13 15h3"></path></symbol>
 	<symbol id="wf-unknown" viewBox="0 0 24 24"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Z"></path><path d="M14 3v6h6"></path><path d="M12 17v.01"></path><path d="M12 14a2 2 0 1 0-2-2"></path></symbol>
-	<symbol id="wf-ro" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></symbol>
-	<symbol id="wf-write" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></symbol>
+	<symbol id="wf-edit" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path></symbol>
 	<symbol id="wf-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></symbol>
 	<symbol id="wf-static" viewBox="0 0 24 24"><path d="M12 21s7-5.7 7-12a7 7 0 1 0-14 0c0 6.3 7 12 7 12Z"></path><circle cx="12" cy="9" r="2.5"></circle></symbol>
 	<symbol id="wf-auth" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"></circle><path d="m11 12 8-8M17 4l3 3M15 6l2 2"></path></symbol>
 	<symbol id="wf-ip" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"></circle><path d="m5.5 5.5 13 13"></path></symbol>
+	<symbol id="wf-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5.5 9.5V20h13V9.5"></path></symbol>
+	<symbol id="wf-more" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="19" cy="12" r="1.6"></circle></symbol>
 </svg>
 
 <div class="main webftp">
-<div class="public_pa">在线文件管理</div>
-<div id='location'>
-	当前目录：<a href='?c=webftp&a=cd&file=%2f'>根目录</a> / 
-	{{foreach from=$cwds item=row}}
-		{{append var='dir' value=$row}}
-		{{append var='dir' value='/'}}
-		<a href='?c=webftp&a=cd&file=%2f{{urlencode(implode($dir))}}'>{{$row|escape:'html'}}</a>
-		/ 
-	{{/foreach}}
-</div>
-<div id="fileblock">
-	<table border="0" cellpadding="5" width='100%' cellspacing="0">
-		<tr>
-			<td colspan='6' class="td_bgc">
-				[<a	href='javascript:refresh()'>刷新</a>]
-				[<a	href='javascript:reversSelectAll()'>反选</a>]
-				[<a	href='javascript:mkdir()'>新建目录</a>]
-				[<a href='javascript:newfile()'>新建文件</a>]
-				[<a href='javascript:upload()'>上传文件</a>]
-				[<a href='javascript:rmall()'>删除</a>]
-				[<a href='javascript:cutall()'>剪切</a>]
-				[<a href='javascript:copyall()'>复制</a>]
-				[<a href='javascript:parseall()'>粘贴</a>]
-				[<a href='javascript:compress("{{basename($cwd)|escape:'javascript'}}")'>压缩</a>]
-				[<a	href='javascript:readonly(1)'>只读</a>]
-				[<a	href='javascript:readonly(0)'>可写</a>]
-				[<a href='javascript:syncaccess()'>重建属性</a>]
-				[<a href='javascript:addwget("{{$wgetdir|escape:'javascript'}}")'>远程下载</a>]
-				<span id="epShellTaskSlot"></span>
-			</td>
-		</tr>
-		<tr>
-			<td colspan='6'>
-			<a href='?c=webftp&a=cd&file=..'>
-			<svg class="ep-file-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-up"></use></svg>上级目录
-			</a>
-			<i style="margin-left:40px;">如无法操作,请更换chrome,或firefox浏览器。上传后缀为sql,zip格式的文件,文件后面会自动显示导入,解压按钮</i>
-			</td>
-		</tr>
-		{{foreach from=$files item=file}} {{$tr=$tr+1}}
-		<tr id='tr{{$tr}}'>
+	<div class="public_pa">在线文件管理</div>
 
-			<td >
-				<input name='files[]' type='checkbox' value='{{$cwd|escape:'html'}}/{{$file.filenamehtml}}'>
-				<svg class="ep-file-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-{{$file.type}}"></use></svg> <a href="javascript:{{if $file.dir}}getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',1){{else}}editfrom('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}'){{/if}}" title="{{if $file.dir}}进入目录{{else}}编辑该文件{{/if}}">{{$file.filename|escape:'html'}}</a>
-				{{if $file.type=='zip'}} 
-				<a href="javascript:decompress('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">解压</a>
-				{{/if}}
-				{{if substr($file.filename,-7)=='.sql.7z' || substr($file.filename,-4)=='.sql'}} 
-				<a href="javascript:mysqldumpin('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">导入</a>
-				{{/if}}
-				{{if substr($file.filename,-7)=='.web.7z'}} 
-				<a href="javascript:restoreweb('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">恢复</a>
-				{{/if}}
-			</td>
-			<td >
-				{{if !$file.writable}}
-				<svg class="ep-file-ico is-muted" viewBox="0 0 24 24" role="img"><title>只读</title><use href="#wf-ro"></use></svg>
-				{{else}}
-				<svg class="ep-file-ico is-muted" viewBox="0 0 24 24" role="img"><title>可写</title><use href="#wf-write"></use></svg>
-				{{/if}}
-			</td>
-			<td >
-				[<a	href="javascript:file_access('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',{{$file.dir}},'{{$file.propty|escape:'javascript'}}')">属性</a>]
-				{{if $file.propty=='deny'}}
-				<svg class="ep-file-ico is-muted" viewBox="0 0 24 24" role="img"><title>锁定</title><use href="#wf-lock"></use></svg>
-				{{/if}}
-				{{if $file.propty=='static'}}
-				<svg class="ep-file-ico is-muted" viewBox="0 0 24 24" role="img"><title>静态</title><use href="#wf-static"></use></svg>
-				{{/if}}
-				{{if substr($file.propty,0,5)=='auth:'}} 
-				<svg class="ep-file-ico is-muted" viewBox="0 0 24 24" role="img"><title>HTTP认证</title><use href="#wf-auth"></use></svg>
-				{{/if}}
-				{{if substr($file.propty,0,3)=='ip:'}}
-				<svg class="ep-file-ico is-muted" viewBox="0 0 24 24" role="img"><title>IP限制</title><use href="#wf-ip"></use></svg>
-				{{/if}}
-			</td>
-			<td >
-				[<a href="javascript:rmfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">删除</a>]
-				[<a href="javascript:rename('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">改名</a>]
-				{{if !$file.dir}} 
-				[<a	href="javascript:editfrom('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">编辑</a>]
-				[<a	href="javascript:getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',0)">下载</a>]
-				{{/if}}
-			</td>
-			<td >
-			{{if $file.dir}}
-				<a href="#" class="webftp-directory-size" data-file="{{$cwd|escape:'html'}}/{{$file.filenamehtml}}" onclick="return calculate_directory_size(this);" title="递归统计文件大小，不跟随符号链接；点击可重新计算">[计算]</a>
-			{{else}} 
-				{{if $file.info[7]>1048576}}
-					{{number_format($file.info[7]/1048576, 2,'.', '')}}MB
-				{{elseif $file.info[7]>1024}}
-					{{number_format($file.info[7]/1024, 2, '.', '')}}KB 
-				{{else}}
-					{{$file.info[7]}} 
-				{{/if}} 
-			{{/if}}
-			</td>
-			<td >
-			{{if $file.dir}}
-				-
-			{{else}}
-				{{date("Y-m-d H:i:s",$file.info[9])}}
-			{{/if}}
-			</td>
-		</tr>
+	<div class="wf-toolbar">
+		<div class="wf-toolbar-scroll">
+			<button type="button" class="btn btn-default btn-sm" onclick="refresh()">刷新</button>
+			<button type="button" class="btn btn-primary btn-sm" onclick="upload()">上传文件</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="mkdir()">新建目录</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="newfile()">新建文件</button>
+			<div class="wf-tb-extra">
+				<span class="wf-sep"></span>
+				<button type="button" class="btn btn-default btn-sm" onclick="addwget('{{$wgetdir|escape:'javascript'}}')">远程下载</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="reversSelectAll()">反选</button>
+				<span class="wf-sep"></span>
+				<button type="button" class="btn btn-default btn-sm" onclick="cutall()">剪切</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="copyall()">复制</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="parseall()">粘贴</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="compress()">压缩</button>
+			</div>
+		</div>
+		<details class="wf-more is-toolbar">
+			<summary class="btn btn-default btn-sm">更多</summary>
+			<div class="wf-more-menu">
+				<a class="is-mobile" href="javascript:addwget('{{$wgetdir|escape:'javascript'}}')">远程下载</a>
+				<a class="is-mobile" href="javascript:reversSelectAll()">反选</a>
+				<a class="is-mobile" href="javascript:cutall()">剪切</a>
+				<a class="is-mobile" href="javascript:copyall()">复制</a>
+				<a class="is-mobile" href="javascript:parseall()">粘贴</a>
+				<a class="is-mobile" href="javascript:compress()">压缩</a>
+				<a href="javascript:readonly(1)">设为只读</a>
+				<a href="javascript:readonly(0)">设为可写</a>
+				<a href="javascript:syncaccess()">重建属性</a>
+			</div>
+		</details>
+		<span id="epShellTaskSlot"></span>
+	</div>
+
+	<div id="location" class="wf-crumbs">
+		<form class="wf-pathedit" id="wfPathForm" method="get" action="">
+			<input type="hidden" name="c" value="webftp">
+			<input type="hidden" name="a" value="cd">
+			<input type="text" id="wfPathInput" name="file" value="{{$cwd|escape:'html'}}" spellcheck="false" autocomplete="off" enterkeyhint="go" aria-label="输入路径跳转">
+			<button type="submit" class="btn btn-primary btn-sm">跳转</button>
+		</form>
+		<a class="wf-crumb is-home" href='?c=webftp&a=cd&file=%2f'>
+			<svg class="wf-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-home"></use></svg>根目录</a>
+		{{foreach from=$cwds item=row}}
+			{{append var='dir' value=$row}}
+			{{append var='dir' value='/'}}
+			<span class="wf-crumb-sep">/</span>
+			<a class="wf-crumb" href='?c=webftp&a=cd&file=%2f{{urlencode(implode($dir))}}'>{{$row|escape:'html'}}</a>
 		{{/foreach}}
-	</table>
-</div>
+		<button type="button" class="wf-path-btn" id="wfPathBtn" title="输入路径跳转" aria-label="输入路径跳转">
+			<svg class="wf-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-edit"></use></svg>
+		</button>
+		<span class="wf-tip">sql、zip 压缩包会在行内给出导入 / 解压入口</span>
+	</div>
+
+	<div id="fileblock">
+		<div class="wf-table-wrap">
+			<table class="wf-table">
+				<thead>
+					<tr>
+						<th class="wf-col-check"><input type="checkbox" id="wfCheckAll" title="全选 / 取消全选" aria-label="全选 / 取消全选"></th>
+						<th class="wf-col-name">名称</th>
+						<th class="wf-col-size">大小</th>
+						<th class="wf-col-time">修改时间</th>
+						<th class="wf-col-prop">权限</th>
+						<th class="wf-col-actions">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="wf-parent">
+						<td class="wf-col-check"></td>
+						<td class="wf-col-name">
+							<div class="wf-name">
+								<svg class="wf-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-up"></use></svg>
+								<a class="wf-link" href='?c=webftp&a=cd&file=..'>返回上级目录</a>
+							</div>
+						</td>
+						<td class="wf-col-size"></td>
+						<td class="wf-col-time"></td>
+						<td class="wf-col-prop"></td>
+						<td class="wf-col-actions"></td>
+					</tr>
+					{{foreach from=$files item=file}} {{$tr=$tr+1}}
+					<tr id='tr{{$tr}}' class="{{if $file.dir}}is-dir{{/if}}">
+						<td class="wf-col-check">
+							<input class="wf-check" name='files[]' type='checkbox' value='{{$cwd|escape:'html'}}/{{$file.filenamehtml}}'>
+						</td>
+						<td class="wf-col-name">
+							<div class="wf-name">
+								<svg class="wf-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-{{$file.type}}"></use></svg>
+								<a class="wf-link" href="javascript:{{if $file.dir}}getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',1){{else}}editfrom('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}'){{/if}}" title="{{if $file.dir}}进入目录{{else}}编辑该文件{{/if}}">{{$file.filename|escape:'html'}}</a>
+							</div>
+						</td>
+						<td class="wf-col-size">
+							{{if $file.dir}}
+							<a href="#" class="wf-dirsize webftp-directory-size" data-file="{{$cwd|escape:'html'}}/{{$file.filenamehtml}}" onclick="return calculate_directory_size(this);" title="递归统计文件大小，不跟随符号链接；点击可重新计算">计算</a>
+							{{else}}
+								{{if $file.info[7]>1048576}}
+									{{number_format($file.info[7]/1048576, 2,'.', '')}} MB
+								{{elseif $file.info[7]>1024}}
+									{{number_format($file.info[7]/1024, 2, '.', '')}} KB
+								{{else}}
+									{{$file.info[7]}} B
+								{{/if}}
+							{{/if}}
+						</td>
+						<td class="wf-col-time">
+							{{if $file.dir}}-{{else}}{{date("Y-m-d H:i",$file.info[9])}}{{/if}}
+						</td>
+						<td class="wf-col-prop">
+							{{if !$file.writable}}
+							<span class="wf-badge is-ro">只读</span>
+							{{else}}
+							<span class="wf-rw">可写</span>
+							{{/if}}
+							{{if $file.propty=='deny'}}
+							<svg class="wf-flag is-warn" viewBox="0 0 24 24" role="img" aria-label="禁止访问"><title>禁止访问</title><use href="#wf-lock"></use></svg>
+							{{/if}}
+							{{if $file.propty=='static'}}
+							<svg class="wf-flag" viewBox="0 0 24 24" role="img" aria-label="静态"><title>静态</title><use href="#wf-static"></use></svg>
+							{{/if}}
+							{{if substr($file.propty,0,5)=='auth:'}}
+							<svg class="wf-flag" viewBox="0 0 24 24" role="img" aria-label="HTTP 认证"><title>HTTP 认证</title><use href="#wf-auth"></use></svg>
+							{{/if}}
+							{{if substr($file.propty,0,3)=='ip:'}}
+							<svg class="wf-flag" viewBox="0 0 24 24" role="img" aria-label="IP 限制"><title>IP 限制</title><use href="#wf-ip"></use></svg>
+							{{/if}}
+						</td>
+						<td class="wf-col-actions">
+							<div class="wf-actions">
+								{{if $file.dir}}
+								<a class="wf-act" href="javascript:getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',1)">进入</a>
+								{{else}}
+								<a class="wf-act" href="javascript:editfrom('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">编辑</a>
+								<a class="wf-act" href="javascript:getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',0)">下载</a>
+								{{if $file.type=='zip'}}
+								<a class="wf-act" href="javascript:decompress('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">解压</a>
+								{{/if}}
+								{{/if}}
+								<details class="wf-more">
+									<summary title="更多操作" aria-label="更多操作">
+										<svg class="wf-ico" viewBox="0 0 24 24" aria-hidden="true"><use href="#wf-more"></use></svg>
+									</summary>
+									<div class="wf-more-menu">
+										{{if $file.dir}}
+										<a class="is-mobile" href="javascript:getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',1)">进入目录</a>
+										{{else}}
+										<a class="is-mobile" href="javascript:editfrom('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">编辑</a>
+										<a class="is-mobile" href="javascript:getfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',0)">下载</a>
+										{{/if}}
+										<a href="javascript:rename('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">改名</a>
+										<a href="javascript:file_access('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}',{{$file.dir}},'{{$file.propty|escape:'javascript'}}')">属性</a>
+										{{if !$file.dir}}
+											{{if $file.type=='zip'}}
+											<a href="javascript:decompress('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">解压到…</a>
+											{{/if}}
+											{{if substr($file.filename,-7)=='.sql.7z' || substr($file.filename,-4)=='.sql'}}
+											<a href="javascript:mysqldumpin('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">导入数据库</a>
+											{{/if}}
+											{{if substr($file.filename,-7)=='.web.7z'}}
+											<a href="javascript:restoreweb('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">恢复网站</a>
+											{{/if}}
+										{{/if}}
+										<a class="is-danger" href="javascript:rmfile('{{$cwd|escape:'javascript'}}/{{$file.filenamejs}}')">删除</a>
+									</div>
+								</details>
+							</div>
+						</td>
+					</tr>
+					{{/foreach}}
+				</tbody>
+			</table>
+		</div>
+		{{if !$files}}
+		<div class="ep-empty">当前目录是空的</div>
+		{{/if}}
+	</div>
 </div>
 
 <button type="button" class="ep-quick-toggle" id="epQuickToggle" aria-expanded="false" aria-controls="epQuickMenu" title="快捷操作">
@@ -163,7 +234,7 @@ var cwd = '{{$cwd|escape:'javascript'}}';
 		<a role="menuitem" href="javascript:cutall()">剪切</a>
 		<a role="menuitem" href="javascript:copyall()">复制</a>
 		<a role="menuitem" href="javascript:parseall()">粘贴</a>
-		<a role="menuitem" href="javascript:compress('{{basename($cwd)|escape:'javascript'}}')">压缩</a>
+		<a role="menuitem" href="javascript:compress()">压缩</a>
 		<a role="menuitem" href="javascript:readonly(1)">只读</a>
 		<a role="menuitem" href="javascript:readonly(0)">可写</a>
 		<a role="menuitem" class="is-wide" href="javascript:syncaccess()">重建属性</a>
@@ -191,6 +262,48 @@ var cwd = '{{$cwd|escape:'javascript'}}';
 		});
 		$menu.on('click', '.ep-quick-close, .ep-quick-grid a', function () {
 			setOpen(false);
+		});
+
+		/* 全选 / 取消全选 */
+		jq('#wfCheckAll').on('change', function () {
+			jq('input[name="files[]"]').prop('checked', this.checked);
+		});
+
+		/* 面包屑切换为可输入路径：回车跳转，Esc 或失焦还原 */
+		var $loc = jq('#location'), $pin = jq('#wfPathInput');
+		jq('#wfPathBtn').on('click', function () {
+			$loc.addClass('is-editing');
+			$pin.val(cwd || '/').focus().select();
+		});
+		$pin.on('keydown', function (e) {
+			if (e.keyCode === 27) $loc.removeClass('is-editing');
+		});
+		$pin.on('blur', function () {
+			// 延迟判断：点“跳转”按钮时先失焦再 click，不能立刻收起
+			setTimeout(function () {
+				var form = document.getElementById('wfPathForm');
+				if (!form || !form.contains(document.activeElement)) $loc.removeClass('is-editing');
+			}, 150);
+		});
+
+		/* 行内/工具栏更多菜单：同时只展开一个，点空白、点菜单项或 Esc 收起 */
+		jq('#fileblock').on('click', 'details.wf-more > summary', function () {
+			var self = this.parentNode;
+			jq('details.wf-more').each(function () {
+				if (this !== self) this.open = false;
+			});
+		});
+		jq('.wf-more-menu a').on('click', function () {
+			var box = jq(this).closest('details')[0];
+			if (box) box.open = false;
+		});
+		jq(document).on('click', function (e) {
+			jq('details.wf-more').each(function () {
+				if (this.open && !this.contains(e.target)) this.open = false;
+			});
+		});
+		jq(document).on('keydown', function (e) {
+			if (e.keyCode === 27) jq('details.wf-more').prop('open', false);
 		});
 	});
 </script>

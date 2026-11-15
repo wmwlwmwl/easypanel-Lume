@@ -902,4 +902,498 @@
 	}
 }
 
+/* ── 在线文件：文件列表 ───────────────────────────────── */
+.main.webftp {
+	overflow: visible;
+	padding-bottom: 14px;
+	/* 给右下角悬浮快捷按钮留出高度，滚到底时末行不会被遮住 */
+	margin-bottom: 72px;
+}
+
+.wf-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	padding: 12px 0 10px;
+	border-bottom: 1px solid var(--ep-border);
+}
+
+.wf-toolbar > * {
+	flex: 0 0 auto;
+}
+
+.wf-toolbar-scroll {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+}
+
+.wf-toolbar-scroll > * {
+	flex: 0 0 auto;
+}
+
+/* 次要操作：手机上收进“更多” */
+.wf-tb-extra {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.wf-sep {
+	width: 1px;
+	height: 18px;
+	margin: 0 2px;
+	background: var(--ep-border);
+}
+
+/* 行内菜单里仅移动端可用（移动端隐藏平铺按钮后补位） */
+@media (min-width: 769px) {
+	.wf-more-menu a.is-mobile {
+		display: none;
+	}
+}
+
+/* 面包屑 */
+.wf-crumbs {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 2px;
+	margin: 12px 0 10px;
+	color: var(--ep-muted);
+	font-size: 13px;
+}
+
+.wf-crumb {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 3px 8px;
+	border-radius: 7px;
+	color: var(--ep-text);
+}
+
+.wf-crumb:hover {
+	background: #eef4ff;
+	color: var(--ep-primary);
+}
+
+.wf-crumb.is-home {
+	color: var(--ep-muted);
+}
+
+.wf-crumb.is-home .wf-ico {
+	color: var(--ep-primary);
+}
+
+.wf-crumb-sep {
+	color: #c8d0dd;
+}
+
+/* 面包屑 → 手动输入路径 */
+.wf-pathedit {
+	display: none;
+	flex: 1 1 auto;
+	align-items: center;
+	gap: 8px;
+	min-width: 0;
+}
+
+.wf-crumbs.is-editing .wf-pathedit {
+	display: flex;
+}
+
+.wf-crumbs.is-editing .wf-crumb,
+.wf-crumbs.is-editing .wf-crumb-sep,
+.wf-crumbs.is-editing .wf-path-btn,
+.wf-crumbs.is-editing .wf-tip {
+	display: none;
+}
+
+.wf-pathedit input {
+	flex: 1 1 auto;
+	min-width: 0;
+	height: 30px;
+	padding: 0 10px;
+	border: 1px solid var(--ep-primary);
+	border-radius: 8px;
+	background: #fff;
+	color: var(--ep-text);
+	font: inherit;
+	font-size: 13px;
+	outline: none;
+	box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+}
+
+.wf-pathedit .btn {
+	flex: 0 0 auto;
+	height: 30px;
+	padding: 0 14px;
+}
+
+.wf-path-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 26px;
+	height: 26px;
+	padding: 0;
+	border: 0;
+	border-radius: 7px;
+	background: transparent;
+	color: var(--ep-muted);
+	cursor: pointer;
+}
+
+.wf-path-btn:hover {
+	background: #eef4ff;
+	color: var(--ep-primary);
+}
+
+.wf-tip {
+	flex: 1 1 auto;
+	min-width: 180px;
+	text-align: right;
+	color: var(--ep-muted);
+	font-size: 12px;
+}
+
+/* 表格 */
+#fileblock {
+	border-top: 0;
+}
+
+.wf-table-wrap {
+	overflow: visible;
+	border: 1px solid var(--ep-border);
+	border-radius: var(--ep-radius-sm);
+}
+
+.wf-table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	font-size: 13px;
+}
+
+.wf-table th {
+	padding: 10px 12px;
+	background: #f7f9fc;
+	color: var(--ep-muted);
+	font-size: 12px;
+	font-weight: 600;
+	text-align: left;
+	white-space: nowrap;
+	border-bottom: 1px solid var(--ep-border);
+}
+
+.wf-table thead th:first-child {
+	padding-left: 14px;
+	border-top-left-radius: var(--ep-radius-sm);
+}
+
+.wf-table thead th:last-child {
+	border-top-right-radius: var(--ep-radius-sm);
+}
+
+.wf-table td {
+	padding: 9px 12px;
+	border-bottom: 1px solid #eef2f8;
+	vertical-align: middle;
+}
+
+.wf-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.wf-table .wf-col-check {
+	width: 38px;
+	padding-left: 14px;
+	padding-right: 0;
+	text-align: center;
+}
+
+.wf-table .wf-col-check input {
+	width: 15px;
+	height: 15px;
+	margin: 0;
+	accent-color: var(--ep-primary);
+	vertical-align: -2px;
+	cursor: pointer;
+}
+
+.wf-table .wf-col-size {
+	width: 96px;
+	color: var(--ep-muted);
+	white-space: nowrap;
+}
+
+.wf-table .wf-col-time {
+	width: 132px;
+	color: var(--ep-muted);
+	white-space: nowrap;
+}
+
+.wf-table .wf-col-prop {
+	width: 112px;
+	white-space: nowrap;
+}
+
+.wf-table .wf-col-actions {
+	width: 1%;
+	text-align: right;
+}
+
+/* 文件名 */
+.wf-name {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+}
+
+.wf-link {
+	color: var(--ep-text);
+	font-weight: 500;
+	word-break: break-word;
+}
+
+.wf-link:hover {
+	color: var(--ep-primary);
+}
+
+.wf-ico,
+.wf-flag {
+	flex: 0 0 auto;
+	width: 17px;
+	height: 17px;
+	color: var(--ep-muted);
+	fill: none;
+	stroke: currentColor;
+	stroke-width: 1.8;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	vertical-align: -3px;
+}
+
+.wf-table tr.is-dir .wf-ico {
+	color: #eaa53c;
+}
+
+.wf-parent .wf-link,
+.wf-parent .wf-ico {
+	color: var(--ep-muted);
+}
+
+.wf-parent .wf-link:hover {
+	color: var(--ep-primary);
+}
+
+/* 权限 */
+.wf-badge {
+	display: inline-block;
+	padding: 1px 8px;
+	border-radius: 999px;
+	font-size: 12px;
+	line-height: 1.6;
+}
+
+.wf-badge.is-ro {
+	background: #fef4e2;
+	color: #b45309;
+}
+
+.wf-rw {
+	color: var(--ep-muted);
+	font-size: 12px;
+}
+
+.wf-flag {
+	width: 14px;
+	height: 14px;
+	margin-left: 5px;
+}
+
+.wf-flag.is-warn {
+	color: var(--ep-danger);
+}
+
+/* 行内操作 */
+.wf-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 4px;
+}
+
+.wf-act {
+	padding: 3px 8px;
+	border-radius: 7px;
+	color: var(--ep-primary);
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+.wf-act:hover {
+	background: #eef4ff;
+	color: var(--ep-primary);
+}
+
+.wf-dirsize {
+	color: var(--ep-muted);
+	font-size: 12px;
+}
+
+.wf-dirsize:hover {
+	color: var(--ep-primary);
+}
+
+.wf-more {
+	position: relative;
+}
+
+.wf-more > summary {
+	list-style: none;
+	cursor: pointer;
+	user-select: none;
+}
+
+.wf-more > summary::-webkit-details-marker {
+	display: none;
+}
+
+.wf-more > summary:focus:not(:focus-visible) {
+	outline: none;
+}
+
+#fileblock .wf-more > summary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 26px;
+	border-radius: 7px;
+	color: var(--ep-muted);
+}
+
+#fileblock .wf-more > summary:hover,
+#fileblock .wf-more[open] > summary {
+	background: #eef4ff;
+	color: var(--ep-primary);
+}
+
+.wf-more-menu {
+	position: absolute;
+	top: calc(100% + 4px);
+	right: 0;
+	z-index: 30;
+	min-width: 132px;
+	text-align: left;
+	padding: 5px;
+	border: 1px solid var(--ep-border);
+	border-radius: 10px;
+	background: #fff;
+	box-shadow: 0 12px 28px rgba(16, 24, 40, .16);
+}
+
+.wf-more-menu a {
+	display: block;
+	padding: 6px 10px;
+	border-radius: 7px;
+	color: var(--ep-text);
+	font-size: 13px;
+	white-space: nowrap;
+}
+
+.wf-more-menu a:hover {
+	background: #f2f7ff;
+	color: var(--ep-primary);
+}
+
+.wf-more-menu a.is-danger {
+	color: var(--ep-danger);
+}
+
+.wf-more-menu a.is-danger:hover {
+	background: #fef2f2;
+	color: var(--ep-danger);
+}
+
+@media (max-width: 768px) {
+	.wf-toolbar {
+		flex-wrap: nowrap;
+		gap: 6px;
+		padding: 10px 0 8px;
+	}
+
+	/* 只让按钮区横向滚动，“更多”留在滚动区外，避免下拉层被裁剪 */
+	.wf-toolbar-scroll {
+		flex: 0 1 auto;
+		flex-wrap: nowrap;
+		gap: 6px;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: none;
+	}
+
+	/* 手机上按钮紧凑一点，四个常用操作 + 更多尽量一行放下 */
+	.wf-toolbar-scroll .btn {
+		padding: 0 10px;
+		font-size: 12px;
+	}
+
+	.wf-toolbar-scroll::-webkit-scrollbar {
+		display: none;
+	}
+
+	/* 手机只保留刷新/上传/新建目录/新建文件，其余进“更多” */
+	.wf-tb-extra {
+		display: none;
+	}
+
+	.wf-tip {
+		display: none;
+	}
+
+	.wf-table .wf-col-time {
+		display: none;
+	}
+
+	.wf-table th,
+	.wf-table td {
+		padding: 8px 10px;
+	}
+
+	.wf-table .wf-col-size {
+		width: 76px;
+	}
+
+	.wf-actions {
+		gap: 2px;
+	}
+
+	/* 移动端点击文件名即可进入目录/编辑文件，平铺按钮让位给文件名 */
+	.wf-act {
+		display: none;
+	}
+}
+
+@media (max-width: 560px) {
+	.wf-table .wf-col-prop {
+		display: none;
+	}
+
+	.wf-table .wf-col-check {
+		width: 32px;
+		padding-left: 10px;
+	}
+
+	.wf-table .wf-col-size {
+		width: 64px;
+		font-size: 12px;
+	}
+}
+
 /* 弹窗公共样式已移至 style/style.css，保证全站统一 */
