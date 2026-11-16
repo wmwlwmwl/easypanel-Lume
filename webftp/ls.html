@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="{{$PSTATIC}}/style/shell.css?v=2">
 <script src="{{$PSTATIC}}/style/shell.js?v=6"></script>
-<link rel="stylesheet" href="{{$STATIC}}webftp/style.css?v=26">
+<link rel="stylesheet" href="{{$STATIC}}webftp/style.css?v=27">
 <script src="{{$STATIC}}webftp/editor.js?v=7"></script>
 <script src="{{$STATIC}}webftp/upload-drog.js?v=5"></script>
 <script type='text/javascript'>
@@ -292,6 +292,18 @@ var cwd = '{{$cwd|escape:'javascript'}}';
 			jq('details.wf-more').each(function () {
 				if (this !== self) this.open = false;
 			});
+		});
+		/* 靠近窗口底部时向上展开，避免菜单被切掉 */
+		jq('.wf-more > summary').on('click', function () {
+			var box = this.parentNode;
+			setTimeout(function () {
+				var menu = box.querySelector('.wf-more-menu');
+				if (!menu) return;
+				box.classList.remove('is-up');
+				if (menu.getBoundingClientRect().bottom > window.innerHeight - 8) {
+					box.classList.add('is-up');
+				}
+			}, 0);
 		});
 		jq('.wf-more-menu a').on('click', function () {
 			var box = jq(this).closest('details')[0];

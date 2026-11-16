@@ -1298,6 +1298,12 @@
 	box-shadow: 0 12px 28px rgba(16, 24, 40, .16);
 }
 
+/* 靠近窗口底部时改为向上展开，避免菜单被切掉 */
+.wf-more.is-up > .wf-more-menu {
+	top: auto;
+	bottom: calc(100% + 4px);
+}
+
 .wf-more-menu a {
 	display: block;
 	padding: 6px 10px;
